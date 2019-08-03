@@ -14,27 +14,29 @@ import ServerRouter from './client/ServerRouter';
 import theme from './utils/theme';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
-import User from './models/User'
+import User from './models/User';
+import Recipe from './models/Recipe';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.static('./dist'));
+app.use(cookieParser())
 
-// app.use(async (req, res, next) => {
-//
-//   const token = req.cookies.token ? req.cookies.token : null;
-//   if (token !== null) {
-//     try {
-//       const currentUser = await jwt.verify(token, 'secret' );
-//       req.currentUser = currentUser;
-//     } catch (err) {
-//       console.error(err);
-//       res.clearCookie('token');
-//     }
-//   }
-//   next();
-// });
+app.use(async (req, res, next) => {
+
+  const token = req.cookies.token ? req.cookies.token : null;
+  if (token !== null) {
+    try {
+      const currentUser = await jwt.verify(token, 'secret' );
+      req.currentUser = currentUser;
+    } catch (err) {
+      console.error(err);
+      res.clearCookie('token');
+    }
+  }
+  next();
+});
 
 // with new way after apollo migration to v2
 const apolloServer = new ApolloServer({
