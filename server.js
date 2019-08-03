@@ -13,5 +13,6 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }).then(() => {
 
 console.log('What is process browser...', process.browser)
 
+const PORT = process.env.PORT || 3000
 // run server
-app.listen(process.env.PORT);
+app.listen(PORT);
