@@ -1,0 +1,7 @@
+{
+  "DB": {
+    "host": "mongodb://<dbuser>:<dbpassword>@ds261096.mlab.com:61096/forkit"
+  }
+}
+
+
