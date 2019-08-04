@@ -103,7 +103,11 @@ export default (props) => (
   <PageLayout showSearch={false}>
     <Wrap>
       <ImageWrapper>
-        <Image src={imageURL} alt="Kitchen Placeholder" />
+        <Image 
+          src={imageURL} 
+          alt="Kitchen Placeholder"
+          onClick={() => console.log('hi')}
+        />
       </ImageWrapper>
       <Flex>
         <Para>

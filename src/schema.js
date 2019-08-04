@@ -7,6 +7,11 @@ export const typeDefs = gql`
     quantity: String!
   }
 
+  input Ingr{
+    name: String!
+    quantity: String!
+  }
+
   type Recipe {
     _id: ID
     name: String!
@@ -59,7 +64,7 @@ export const typeDefs = gql`
       instructions: String!,
       difficulty: String!,
       image: String,
-      ingridients: [String!]
+      ingridients: [Ingr]
     ): Recipe
   }
 

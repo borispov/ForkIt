@@ -27,8 +27,8 @@ const RecipeSchema = new Schema({
   image: String,
 
   ingridients: {
-    type: Map,
-    of: String,
+    type: Array,
+    default: [],
     required: true
   }
 
