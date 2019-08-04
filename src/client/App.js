@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Kitchen from './pages/Kitchen';
 import { recipes } from '../utils/fakedata';
+import AddRecipe from './pages/AddRecipe';
 
 const HelloTest = () => <h1>HelloTest</h1>
 
@@ -20,6 +21,7 @@ export default ({state = initState}) => {
         <Route exact path="/home" render={() => <Home showSearch {...initState} />} />
         <Route exact path="/about" render={() => <About />} />
         <Route exact path="/kitchen" render={() => <Kitchen />} />
+        <Route exact path="/addrecipe" render={() => <AddRecipe />} />
       </Switch>
     </>
   );

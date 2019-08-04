@@ -81,6 +81,7 @@ export const resolvers = {
       {name, description, instructions, difficulty, image, ingridients},
       { Recipe }
     ) => {
+      console.log(ingridients)
       const newRecipe = await new Recipe({
         name,
         description,

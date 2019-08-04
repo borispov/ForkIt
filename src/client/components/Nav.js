@@ -105,7 +105,9 @@ export default () => (
       {
         navLinks.map(mapLinksToList)
       }
-      <AddRecipeBtn />
+      <Link to="/addrecipe">
+        <AddRecipeBtn />
+      </Link>
       <div>
         <StyledLink noline='true' bold='true' to="/Login">
           <MySpan>Login</MySpan>

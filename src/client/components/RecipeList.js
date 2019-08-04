@@ -5,6 +5,7 @@ import { Col, Row } from 'react-styled-flexboxgrid';
 import remcalc from 'remcalc';
 
 const mapRecipeCards = (rec, key) => <RecipeCard key recipeData={rec} />
+
 const Wrapper = styled.div`
   max-width: 1140px;
   margin-left: auto;
