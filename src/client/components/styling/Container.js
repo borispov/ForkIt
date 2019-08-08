@@ -7,6 +7,7 @@ const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
   max-width: 90%;
+  margin-top: ${props => props.mt ? props.mt : '100px'};
 
   @media (min-width: 1200px){
     max-width: 1140px;

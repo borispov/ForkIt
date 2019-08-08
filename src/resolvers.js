@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { makeExecutableSchema } from 'graphql-tools';
 
 const createToken = (user, secret, expiresIn) => {
 
@@ -26,6 +25,7 @@ export const resolvers = {
     // get single recipe
     getRecipe: async(root, { id, name }, { Recipe }) => {
       const recipe = await Recipe.find({_id: id, name})
+      console.log(recipe)
       if (!recipe) throw new Error('recipe was not found')
       return recipe
     },
@@ -81,7 +81,7 @@ export const resolvers = {
       {name, description, instructions, difficulty, image, ingridients},
       { Recipe }
     ) => {
-      console.log(ingridients)
+      console.log('inside addRecipe query, here are the details: ', ingridients)
       const newRecipe = await new Recipe({
         name,
         description,

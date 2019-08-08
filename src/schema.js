@@ -2,14 +2,20 @@ import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
 
+  enum Difficulty {
+    EASY
+    MEDIUM
+    HARD
+  }
+
   type Ingridient {
-    name: String!
-    quantity: String!
+    type: String!
+    amount: String!
   }
 
   input Ingr{
-    name: String!
-    quantity: String!
+    type: String!
+    amount: String!
   }
 
   type Recipe {
@@ -49,9 +55,9 @@ export const typeDefs = gql`
   type Mutation {
 
     signupUser(
-      firstName: String!, 
-      lastName: String!, 
-      email: String!, 
+      firstName: String!,
+      lastName: String!,
+      email: String!,
       password: String!): Token
 
     signinUser(

@@ -13,6 +13,7 @@ const Btn = styled.button`
   font-size: ${remcalc(14)};
   font-weight: 300;
   cursor: pointer;
+  width: ${props => props.width ? props.width : ''};
   &:hover { 
     box-shadow: 0 2px 12px 4px rgba(0,0,0,0.1);
   }

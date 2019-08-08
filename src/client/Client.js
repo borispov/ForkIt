@@ -1,18 +1,30 @@
 import React from 'react';
+import fetch from 'node-fetch';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import theme from '../utils/theme';
 import { hydrate } from 'react-dom';
 import client from '../utils/apolloState';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createHttpLink } from 'apollo-link-http';
+import { ApolloProvider } from 'react-apollo';
 
+const clientS = new ApolloClient({
+  link: createHttpLink({
+    uri: 'http://localhost:3000/graphql',
+    fetch: fetch
+  }),
+  cache: new InMemoryCache().restore(window.__APOLLO_STATE__)
+})
 
 const ClientRouter = ({ state={} }) => {
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={clientS}>
       <ThemeProvider theme={theme}>
         <Router>
-          <App state/>
+          <App />
         </Router>
       </ThemeProvider>
     </ApolloProvider>
@@ -20,6 +32,6 @@ const ClientRouter = ({ state={} }) => {
 };
 
 hydrate(
-  <ClientRouter state={window__STATE__} />, 
+  <ClientRouter state={window.__STATE__} />, 
   document.getElementById('root')
 );

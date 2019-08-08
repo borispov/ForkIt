@@ -1,12 +1,17 @@
 import path from 'path';
+import fetch from 'node-fetch';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import React from 'react';
-import ReactaDOMServer, {renderToString, renderToStaticMarkup} from 'react-dom/server';
+import ReactaDOMServer, {renderToString } from 'react-dom/server';
 import styled, { ThemeProvider, ServerStyleSheet} from 'styled-components';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { ApolloServer, gql } from 'apollo-server-express';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createHttpLink } from 'apollo-link-http';
+import cors from 'cors';
 
 import template from './views/template';
 import client from './utils/apolloState';
@@ -19,11 +24,10 @@ import Recipe from './models/Recipe';
 
 const app = express();
 
-app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "dist")));
+// app.use(express.json());
 app.use(cookieParser())
-
-// app.use("/", express.static(path.resolve(__dirname, "dist")));
+app.use(cors())
+app.use(express.static("./dist"))
 
 app.use(async (req, res, next) => {
 
@@ -51,12 +55,56 @@ const apolloServer = new ApolloServer({
   })
 })
 
-apolloServer.applyMiddleware({ app })
 
-app.get("/*", (req,res) => {
-  const context = req.params.param ? req.params.param : null
+apolloServer.applyMiddleware({ app })
+// replace < code
+// .replace(/</g, '\u003c')
+const HTML = (jsx, tags, state) => {
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>GoodRise</title>
+        ${tags}
+    </head>
+
+    <body>
+        <div id="root">${ jsx }</div>
+        <script>
+          window.__APOLLO_STATE__ = ${JSON.stringify(state).replace(/</g, '\\u003c')}
+        </script>
+        <script src="/bundled_main.js" defer></script>
+    </body>
+    </html>
+  `
+}
+
+
+app.get(['*/:param', '*'], (req,res) => {
+// app.get('#<{(|', (req,res) => {
+  // const client = new ApolloClient({
+  //   ssrMode: true,
+  //   link: createHttpLink({
+  //     uri: `http://localhost:3000/graphql`,
+  //     fetch: fetch,
+  //     credentials: 'same-origin',
+  //     headers: {
+  //       cookie: req.header('Cookie'),
+  //     },
+  //   }),
+  //   cache: new InMemoryCache(),
+  // });
+
+  const URL_Param = req.params.param ? req.params.param : null
   const sheet = new ServerStyleSheet();
-  const RootApp = () => (
+  const context = {
+    URL_Param
+  }
+
+  const RootApp = (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <ServerRouter url={req.url} context={context} />
@@ -64,24 +112,17 @@ app.get("/*", (req,res) => {
     </ApolloProvider>
   );
 
-  // fetch the data across RootApp components.
-  // try {
-  //   getDataFromTree(<RootApp />)
-  // } catch(e) {
-  //   console.log('getDataFromTree, found an error: ', e)
-  // }
-  
-  getDataFromTree(RootApp).then(() => {
 
-    const initialApolloState = client.extract()
-    const jsx = renderToString(sheet.collectStyles(<RootApp />));
-    const styleTags = sheet.getStyleTags();
-    const templated = template(jsx, styleTags, 'Hello Page', initialApolloState);
+  getDataFromTree(RootApp)
 
-    // TODO: DO I need this markUp method???
-    res.send(`<!doctype html>\n${renderToStaticMarkup(templated)}`)
-    res.end()
-  })
+  const initialApolloState = client.extract()
+  console.log('this is the client state: ', initialApolloState)
+  // const jsx = renderToString(sheet.collectStyles(RootApp));
+  const dom = renderToString(RootApp)
+  const styleTags = sheet.getStyleTags();
+
+  res.writeHead(200, {"Content-Type": "text/html"})
+  res.end(HTML( dom, styleTags, initialApolloState ))
 
   // set this date to Apollo State. Later pass it to the markup, ie client.
 })

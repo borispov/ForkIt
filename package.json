@@ -4,7 +4,7 @@
   "description": "A place for storing your meals and kitchen smells",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon bundled.server.js",
+    "start": "nodemon bundled_server.js",
     "webpack": "npx webpack --watch"
   },
   "keywords": [],
@@ -27,11 +27,13 @@
     "bcryptjs": "^2.4.3",
     "config": "^3.2.2",
     "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.5",
+    "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.8",
     "react": "^16.8.6",
@@ -44,6 +46,7 @@
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",

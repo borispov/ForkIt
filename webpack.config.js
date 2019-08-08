@@ -8,7 +8,7 @@ const Config = (entry, name, target, path) => {
     module: {
       rules: [
         {
-          test: /\.jsx?/,
+          test: /\.js?/,
           exclude: /node_modules/,
           loader: "babel-loader",
           options: {
@@ -18,7 +18,8 @@ const Config = (entry, name, target, path) => {
     },
     output: {
       path,
-      filename: `bundled.${name}.js`
+      filename: `bundled_${name}.js`,
+      publicPath: '/'
     }
   }
 }
@@ -31,5 +32,4 @@ const serverEntry = path.resolve(__dirname, "server.js");
 const serverPath = __dirname;
 const serverConfig = Config(serverEntry, "server", "node", serverPath);
 
-console.log(serverConfig)
 module.exports = [serverConfig, clientConfig]

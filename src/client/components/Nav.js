@@ -85,7 +85,7 @@ const MySpan = styled.span`
 `
 
 const mapLinksToList = (link, key) => (
-  <Item key>
+  <Item key={key}>
     {/* TODO :: Use different key instead of index value */}
     <StyledLink to={link.address}>
       <MySpan>{link.title}</MySpan>

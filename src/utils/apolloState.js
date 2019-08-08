@@ -10,18 +10,16 @@ const defaultState = {
   // TODO: Design App's State Tree. what needs to live here?
 }
 
-console.log(process.env.PORT)
-
 export default new ApolloClient({
-    connectToDevTools: process.browser,
+    // connectToDevTools: process.browser,
     ssrMode: !process.browser,
     link: createHttpLink({
       uri: 'http://localhost:4000/graphql',
       fetch: 'fetch',
       credentials: 'same-origin',
-      headers: {
-        cookie: process.browser ? req.header('Cookie') : null
-      }
+      // headers: {
+      //   cookie: process.browser ? req.header('Cookie') : null
+      // }
     }),
     cache: process.browser
             ? new InMemoryCache().restore(window.__APOLLO_STATE__)
