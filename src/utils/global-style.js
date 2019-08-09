@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
         line-height: ${remcalc(21)};
         // padding-bottom: ${remcalc(40)};
         background-color: ${props => props.theme.lightoverlay};
-        overflow: hidden;
+        overflow-x: hidden;
   }
 
   code {

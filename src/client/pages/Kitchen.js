@@ -1,12 +1,34 @@
 import React from 'react';
-import styled from 'styled-components';
-import remcalc from 'remcalc';
+import RecipeList from '../components/RecipeList';
 import PageLayout from '../components/PageLayout';
+import { Query } from 'react-apollo';
 import { GET_RECIPES } from '../../queries';
 
-export default () => (
-  <PageLayout>
-    <h1>Your Sacred Place</h1>
-    <h2>Your Kitchen</h2>
-  </PageLayout>
-)
+const homeProps = {
+  title: 'Da- Kitchen',
+}
+
+const Kitchen = ({recipes}, props) => {
+  return (
+    <PageLayout {...homeProps} showSearch={false}>
+
+      <Query query={GET_RECIPES} variables={{author: 'anonymous'}}>
+
+        {({ loading, error, data }) => {
+
+          if ( loading ) return `<h3> Loading ... </h3>`
+          if ( error ) return `<h5> Error: ${error} </h5>`
+
+          return ( 
+            <RecipeList data={data.getAllRecipes} layout='list' />
+          )
+        }}
+
+      </Query>
+
+    </PageLayout>
+  )
+
+};
+
+export default Kitchen;

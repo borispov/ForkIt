@@ -5,9 +5,6 @@ import PageLayout from '../components/PageLayout';
 import RecipeList from '../components/RecipeList';
 import { Query } from 'react-apollo';
 import { GET_RECIPES } from '../../queries';
-import gql from 'graphql-tag';
-
-const mapRecipes = rec => <li><RecipeCard recipeData={rec} /></li>
 
 const List = styled.ul`
   list-style: none;
