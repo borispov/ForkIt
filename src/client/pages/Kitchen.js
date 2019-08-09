@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import remcalc from 'remcalc';
 import PageLayout from '../components/PageLayout';
+import { GET_RECIPES } from '../../queries';
 
 export default () => (
   <PageLayout>

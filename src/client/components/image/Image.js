@@ -18,16 +18,17 @@ const ImageContainer = styled.div`
 `
 
 const Img = styled.img`
-  cursor: pointer;
+  cursor: cursor;
   width: 100%;
   max-width: 620px;
-  max-height: 420px;
+  min-height: 400px;
+  max-height: 400px;
 `
 
-export const Image = ({ img }) => (
+export const Image = ({ image }) => (
   <ImageWrapper>
     <ImageContainer>
-      <Img src={img || placeHolder} />
+      <Img src={image || placeHolder} />
     </ImageContainer>
   </ImageWrapper>
 )

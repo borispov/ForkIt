@@ -154,7 +154,7 @@ export const CardInstructions = ({ recipes }) => (
                   // TODO :: Use different key instead of index value
                   recipes.ingridients.map((item, key) => 
                     <li key={key}>
-                      {item.quantity} : {item.ing} 
+                      {item.amount} : {item.type} 
                     </li>
                   )
                 }
@@ -166,7 +166,7 @@ export const CardInstructions = ({ recipes }) => (
       <hr />
       <Row>
         <CardParagraph nomg lineHeight={'1.15'}>
-          {recipes.description}
+          {recipes.instructions}
         </CardParagraph>
       </Row>
     </Col>

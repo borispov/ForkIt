@@ -39,15 +39,21 @@ export const GET_CURRENT_USER = gql`
   }
 `
 
+// the author variable is for fetching all recipes of specific users.
 export const GET_RECIPES = gql`
-  query {
-    getAllRecipes {
+  query($author: String) {
+    getAllRecipes(author: $author) {
       name,
       description,
       instructions,
       difficulty,
       image,
-      ingridients,
+      time,
+      author,
+      ingridients {
+        type
+        amount
+      }
     }
   }
 `

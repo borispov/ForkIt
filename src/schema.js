@@ -2,6 +2,8 @@ import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
 
+  scalar Date
+
   enum Difficulty {
     EASY
     MEDIUM
@@ -23,6 +25,8 @@ export const typeDefs = gql`
     name: String!
     description: String!
     instructions: String!
+    author: String
+    time: String
     difficulty: String!
     image: String
     ingridients: [Ingridient]
@@ -49,7 +53,7 @@ export const typeDefs = gql`
     getAllUsers: [User]
     profilePage(Email: String!): User
     getRecipe: Recipe
-    getAllRecipes: [Recipe]
+    getAllRecipes(author: String): [Recipe]
   }
 
   type Mutation {
@@ -68,10 +72,13 @@ export const typeDefs = gql`
       name: String!,
       description: String!,
       instructions: String!,
+      author: String,
+      time: String,
       difficulty: String!,
       image: String,
       ingridients: [Ingr]
     ): Recipe
+
   }
 
 `

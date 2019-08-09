@@ -12,23 +12,23 @@ const {CardWrapper,
 const { Image } = require('../image/Image');
 
 export default ({recipeData}) => {
-  const { time, difficulty, ingridients, description } = recipeData;
+  const { image, name, instructions, time, difficulty, ingridients, description, author } = recipeData;
   const recipes = {
-    time, difficulty, ingridients
+    time, difficulty, ingridients, instructions
   }
   return (
     <CardWrapper>
       <CardHeader>
-        <CardHeading>{recipeData.title || ''}</CardHeading>
-        {recipeData.subtitle && 
-          <CardHeadingSub>{recipeData.subtitle || ''}</CardHeadingSub>}
-          <CardAuthor>{recipeData.author || 'no named'}</CardAuthor>
+        <CardHeading>{name || ''}</CardHeading>
+        {description &&
+          <CardHeadingSub>{description || ''}</CardHeadingSub>}
+          <CardAuthor>{author || 'no named'}</CardAuthor>
       </CardHeader>
 
-      <Image {...recipeData.img} />
+      <Image image={image} />
       <CardBody>
         <CardInstructions recipes={recipes} />
-        <CardParagraph>{recipeData.description}</CardParagraph>
+        {/*<CardParagraph>{recipeData.description}</CardParagraph> */}
       </CardBody>
     </CardWrapper>
 

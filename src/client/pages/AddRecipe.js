@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
 import { Col, Row, Grid } from 'react-styled-flexboxgrid'
 import remcalc from 'remcalc';
@@ -16,10 +17,12 @@ const ADDR = gql`
     $description: String!,
     $instructions: String!,
     $difficulty: String!,
+    $time: String,
+    $author: String,
     $image: String,
     $ingridients: [Ingr],
   ) {
-    addRecipe(name: $name, description: $description, instructions: $instructions, difficulty: $difficulty, ingridients: $ingridients, image: $image) {
+    addRecipe(name: $name, description: $description, instructions: $instructions, difficulty: $difficulty, ingridients: $ingridients, image: $image, author: $author, time: $time) {
       name
       description
     }
@@ -32,6 +35,7 @@ const initialState = {
   image: '',
   difficulty: 'Choose Difficulty',
   author: '',
+  time: 'N/A'
 }
 
 const Wrapper = styled.div`
@@ -193,12 +197,15 @@ class AddRecipe extends React.Component {
     }
     console.log(this.state)
     addRecipe()
-      .then(({data}) => console.log(data))
+      .then(({data}) =>{
+        console.log('succesfully added recipe to the database...')
+        this.props.history.push('/home')
+      })
       .catch(() => 'Ran Into An Error Mutating Data')
   }
 
   render() {
-    const { description, ingridients, name, instructions, difficulty, image } = this.state
+    const { description, ingridients, name, instructions, difficulty, image, time } = this.state
     this.state;
     // join all errors and display them in a multiline string
     const anyError = Object.values(this.state.errorMsg).filter(val => val !== null).join('\n')
@@ -209,7 +216,7 @@ class AddRecipe extends React.Component {
           <Wrapper>
             <Col>
 
-              <Mutation mutation={ADDR} variables={{ ingridients: ingridients.slice(0,-1), name, instructions, difficulty, description, image }} >
+              <Mutation mutation={ADDR} variables={{ time, ingridients: ingridients.slice(0,-1), name, instructions, difficulty, description, image }} >
 
                 {(addRecipe, {data}) => {
 
@@ -244,6 +251,14 @@ class AddRecipe extends React.Component {
                             type='text'
                             name="image"
                             placeholder="Image URL"
+                            onChange={this.handleChange}
+                          />
+                          <Label>How Long To Cook: (in minutes!) </Label>
+                          <Input
+                            defaultValue=''
+                            type='text'
+                            name="time"
+                            placeholder="120 minutes / 15 minutes, minutes only."
                             onChange={this.handleChange}
                           />
                         </FormGroup>
@@ -289,8 +304,7 @@ class AddRecipe extends React.Component {
   }
 }
 
-export default AddRecipe
-
+export default withRouter(AddRecipe)
 
 
 // -- when you start adding an ingridient: it adds an object to an array.

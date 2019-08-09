@@ -31,10 +31,12 @@ export const resolvers = {
     },
 
     // get all recipes
-    getAllRecipes: async(root, args, { Recipe }) => {
-      const recipes = await Recipe.find().sort({
-        createdAt: "desc"
-      })
+    getAllRecipes: async(root, { author }, { Recipe }) => {
+      const recipes = author ?
+        await Recipe.find({author: author}).sort({
+          createdAt: "desc"
+        }) :
+        await Recipe.find().sort({createdAt: "desc"})
       return recipes
     }
   },
@@ -78,7 +80,7 @@ export const resolvers = {
     // Recipes -- add recipe
     addRecipe: async(
       root,
-      {name, description, instructions, difficulty, image, ingridients},
+      {name, description, instructions, time, author, difficulty, image, ingridients},
       { Recipe }
     ) => {
       console.log('inside addRecipe query, here are the details: ', ingridients)
@@ -87,6 +89,8 @@ export const resolvers = {
         description,
         instructions,
         difficulty,
+        author,
+        time,
         image,
         ingridients
       }).save()

@@ -5,8 +5,8 @@ import remcalc from 'remcalc';
 const Btn = styled.button`
   padding: ${remcalc(6)} ${remcalc(8)};
   border-radius: 2px;
-  background: ${props => props.theme.darkgray};
-  color: ${props => props.theme.cta};
+  background: ${props => props.bg ? props.bg : props.theme.darkgray};
+  color: ${props => props.color ? props.color : props.theme.cta};
   font-family: 'Prompt';
   outline: none;
   border: none;

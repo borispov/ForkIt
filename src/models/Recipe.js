@@ -30,6 +30,20 @@ const RecipeSchema = new Schema({
     type: Array,
     default: [],
     required: true
+  },
+
+  author: {
+    type: String,
+    default: 'anonymous'
+  },
+
+  time: {
+    type: String,
+    default: 'N/A'
+  },
+
+  lastCooked: {
+    type: Date
   }
 
 })
