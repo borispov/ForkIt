@@ -4,6 +4,7 @@ const theme = {
   font: 'Montserrat',
   lineHeight: '1.45',
   card: {
+    color: '#a2b427',
     paraColor: '#e2e2e2',
     font: 'arial',
   },

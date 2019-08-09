@@ -12,7 +12,7 @@ const ListWrapper = styled.div`
   margin-right: auto;
   &:nth-child(odd){
     border-radius: 6px;
-    background: ${props => props.theme.lightgray}22;
+    background: ${props => props.theme.card.color}22;
   }
 `
 
@@ -20,7 +20,6 @@ const ListItem = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  // background: ${props => props.theme.lightgray};
   color: ${props => props.theme.main};
   font-weight: 400;
   font-family: 'Montserrat';
@@ -52,7 +51,7 @@ const Title = styled.span`
 `
 
 const Piece = styled.span`
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   padding: 6px 4px;
   margin-left: 10px;

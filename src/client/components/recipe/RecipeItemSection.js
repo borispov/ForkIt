@@ -14,9 +14,13 @@ const fadeIn = keyframes`
 const Wrapper = styled.div`
   max-width: auto;
   width: inherit;
-  background: ${props => props.theme.darkgray};
+  background: ${props => props.theme.whiteoverlay};
+  background: inherit;
   color: ${props => props.theme.offtext};
   animation:${css`${fadeIn} 0.5s ease-in-out;`};
+  border-radius: 4px;
+  // border-top: 1px solid ${props => props.theme.card.color};
+  border-bottom: 1px solid ${props => props.theme.card.color};
 `
 
 const FlexSection =styled.div`
@@ -33,17 +37,17 @@ const Instructions = styled.p`
   line-height: 1.4;
   font-size: 14px;
   font-family: ${props => props.theme.card.font};
-  color: ${props => props.theme.cta};
+  color: ${props => props.theme.main};
 `
 
 const Amount = styled.span`
   font-weight: 700;
   font-style: italic;
-  color: ${props => props.theme.cta}66;
+  color: #191919;
 `
 const Type = styled.span`
   font-weight: 400;
-  color: ${props => props.theme.cta};
+  color: #191919;
 `
 
 const CookBtn = styled(Btn)`
