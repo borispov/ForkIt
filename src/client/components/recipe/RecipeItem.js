@@ -6,18 +6,21 @@ const ListWrapper = styled.div`
   overflow: hidden;
   display: flex;
   flex-flow: column;
-  *
-  margin-top: 48px;
+  // margin-top: 48px;
   position: relative;
   margin-left: auto;
   margin-right: auto;
+  &:nth-child(odd){
+    border-radius: 6px;
+    background: ${props => props.theme.lightgray}22;
+  }
 `
 
 const ListItem = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  background: ${props => props.theme.lightgray};
+  // background: ${props => props.theme.lightgray};
   color: ${props => props.theme.main};
   font-weight: 400;
   font-family: 'Montserrat';

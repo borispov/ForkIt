@@ -19,13 +19,21 @@ const RowWrapper = styled.div`
   margin: 0 auto;
 `
 
+const DivStyle = styled.div`
+  border-radius: 4px;
+`
+
 const RecipeList = ({ data }) => (
   <Wrapper>
     <Col css="z-index: -1" xs={12}>
       <Row>
         <RowWrapper>
-          {data &&
-            data.map(mapRecipeItems)}
+            {data && (
+                <DivStyle>
+                  {data.map(mapRecipeItems)}
+                </DivStyle>
+              )
+            }
         </RowWrapper>
       </Row>
     </Col>
