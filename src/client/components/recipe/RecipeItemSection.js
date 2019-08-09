@@ -12,6 +12,7 @@ const fadeIn = keyframes`
 `
 
 const Wrapper = styled.div`
+  overflow: hidden;
   max-width: auto;
   width: inherit;
   background: ${props => props.theme.whiteoverlay};

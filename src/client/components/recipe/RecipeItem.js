@@ -63,6 +63,9 @@ const Piece = styled.span`
   &:nth-child(4){
     margin-right: -35px;
     flex-basis: 70px;
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 `
 
