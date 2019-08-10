@@ -37,13 +37,18 @@ const RecipeSchema = new Schema({
     default: 'anonymous'
   },
 
+  authorID: {
+    type: String
+  },
+
   time: {
     type: String,
     default: 'N/A'
   },
 
-  lastCooked: {
-    type: Date
+  lastCookedAt: {
+    type: Date,
+    default: Date.now
   }
 
 })
