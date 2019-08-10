@@ -1,13 +1,20 @@
+import { GraphQLScalarType } from 'graphql';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import Date, { serialize, parseValue, parseLiteral } from './utils/scalar-helper'
 
 const createToken = (user, secret, expiresIn) => {
-
   const { firstName, email } = user
-
   return jwt.sign({ firstName, email }, secret, { expiresIn })
- }
+}
+
 export const resolvers = {
+
+  Date: new GraphQLScalarType({
+    name: 'Date',
+    description: 'Date type scalar',
+    parseValue, serialize, parseLiteral
+  }),
 
   Query: {
     // Get user's credentials
@@ -78,13 +85,14 @@ export const resolvers = {
     },
 
     // Recipes -- add recipe
+    // TODO: Better Error Handling.
     addRecipe: async(
       root,
-      {name, description, instructions, time, author, difficulty, image, ingridients},
-      { Recipe }
+      { authorID, name, description, instructions, time, author, difficulty, image, ingridients},
+      { Recipe, User }
     ) => {
-      console.log('inside addRecipe query, here are the details: ', ingridients)
       const newRecipe = await new Recipe({
+        authorID,
         name,
         description,
         instructions,
@@ -94,6 +102,56 @@ export const resolvers = {
         image,
         ingridients
       }).save()
+      const user = await User.findOneAndUpdate(
+        { email: authorID },
+        {$push: { "recipeList": newRecipe._id }},
+        (err, data) => {
+          if (err) console.log(err)
+          console.log(data)
+        }
+      )
     },
+
+    // Adding reference ID to user's list. 
+    addRecipeToKitchen: async(
+      root,
+      { email, _id },
+      { User , RecipeList }
+    ) => {
+      await User.findOne({ email }, async (err, data) => {
+        const newRecipeToList = await new RecipeList({refID: '12'})
+        console.log(newRecipeToList)
+        const newState = [
+          ...data.recipeList,
+          newRecipeToList
+        ]
+        data.recipeList = newState
+        data.save()
+      })
+    },
+
+    // Current Implementation: FIND USER -> FIND RECIPE by "refID" -> modify it (add date to list, inc totalCooks)
+    // TODO: Better Error Handling 
+    cookRecipe: async(
+      root, 
+      { email, _recID }, 
+      { User }
+    ) => {
+      const userInQuestion = await User.findOne({ email }, async (err, data) => {
+        if (err) console.log(err)
+
+        const userRecipe = await data.recipeList.filter(rec => rec.refID === _recID)
+        const updatedDates = [
+          new Date(),
+          ...userRecipe.lastCooked
+        ]
+        const newTotalCooks = userRecipe.totalCooks + 1
+        userRecipe.lastCooked = updatedDates
+        userRecipe.totalCooks = newTotalCooks
+        data.save()
+      })
+    }
+
+
   }
 }

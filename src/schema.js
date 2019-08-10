@@ -30,6 +30,8 @@ export const typeDefs = gql`
     difficulty: String!
     image: String
     ingridients: [Ingridient]
+    lastCookedAt: Date
+    totalCooks: Int
   }
 
   type User {
@@ -52,7 +54,7 @@ export const typeDefs = gql`
     getUserProfile: User
     getAllUsers: [User]
     profilePage(Email: String!): User
-    getRecipe: Recipe
+    getRecipe(_id: ID!): Recipe
     getAllRecipes(author: String): [Recipe]
   }
 
@@ -76,8 +78,19 @@ export const typeDefs = gql`
       time: String,
       difficulty: String!,
       image: String,
-      ingridients: [Ingr]
+      ingridients: [Ingr],
+      authorID: String
     ): Recipe
+
+    addRecipeToKitchen(
+      email: String!,
+      _id: String!,
+    ): User
+
+    cookRecipe(
+      _recID: String!,
+      email: String!,
+    ): User
 
   }
 
