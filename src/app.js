@@ -19,7 +19,7 @@ import ServerRouter from './client/ServerRouter';
 import theme from './utils/theme';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
-import User from './models/User';
+import { User, RecipeList } from './models/User';
 import Recipe from './models/Recipe';
 
 const app = express();
@@ -51,7 +51,8 @@ const apolloServer = new ApolloServer({
   context: ({req, res}) => ({
     currentUser: req.currentUser,
     Recipe,
-    User
+    User, 
+    RecipeList
   })
 })
 
