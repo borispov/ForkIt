@@ -76,7 +76,7 @@ const RecipeItem = ({ recipeData }) => {
 
   const [isOpen, trigger] = useState(false)
 
-  const { instructions, ingridients, name, author, time, difficulty, lastCooked } = recipeData
+  const { _id, instructions, ingridients, name, author, time, difficulty, lastCooked } = recipeData
 
   const openSection = () => {
     console.log('state before trigger: ', isOpen)
@@ -84,15 +84,16 @@ const RecipeItem = ({ recipeData }) => {
   }
 
   return (
-      <ListWrapper onClick={openSection}>
-        <ListItem>
+      <ListWrapper>
+        <ListItem onClick={openSection}>
           <Title>{name}</Title>
           <Piece>{author}</Piece>
           <Piece>{time.split('\n').join(' ')}</Piece>
           <Piece>{difficulty}</Piece>
-          <Piece>{lastCooked}</Piece>
+          <Piece>{lastCooked || 'NOT cooked'}</Piece>
         </ListItem>
         <RecipeItemSection
+          ID={_id}
           isOpen={isOpen}
           instructions={instructions}
           ingridients={ingridients}

@@ -50,6 +50,10 @@ export const resolvers = {
 
   Mutation: {
 
+    // -------------------------------------------
+    // ---------- USER MUTATIONS -----------------
+    // -------------------------------------------
+
     // This is how we register a user to the system
     signupUser: async (root, { firstName, lastName, email, password }, { User }) => {
       const user = await User.findOne({ email })
@@ -84,6 +88,12 @@ export const resolvers = {
 
     },
 
+
+
+    // -----------------------------
+    // ---- RECIPE MUTATIONS -------
+    // -----------------------------
+
     // Recipes -- add recipe
     // TODO: Better Error Handling.
     addRecipe: async(
@@ -115,11 +125,12 @@ export const resolvers = {
     // Adding reference ID to user's list. 
     addRecipeToKitchen: async(
       root,
-      { email, _id },
+      { email, _recID },
       { User , RecipeList }
     ) => {
       await User.findOne({ email }, async (err, data) => {
-        const newRecipeToList = await new RecipeList({refID: '12'})
+        const newRecipeToList = await new RecipeList({refID: _recID})
+        // for debugging...
         console.log(newRecipeToList)
         const newState = [
           ...data.recipeList,
@@ -148,6 +159,7 @@ export const resolvers = {
         const newTotalCooks = userRecipe.totalCooks + 1
         userRecipe.lastCooked = updatedDates
         userRecipe.totalCooks = newTotalCooks
+        console.log('-- updating recipe cook information: 1) total Cooks 2) last date')
         data.save()
       })
     }

@@ -20,6 +20,7 @@ export const typeDefs = gql`
     amount: String!
   }
 
+  # Can Integrate Total Cooks by all users. 
   type Recipe {
     _id: ID
     name: String!
@@ -64,11 +65,13 @@ export const typeDefs = gql`
       firstName: String!,
       lastName: String!,
       email: String!,
-      password: String!): Token
+      password: String!
+    ): Token
 
     signinUser(
-      email: String!, 
-      password: String!): Token
+      email: String!,
+      password: String!
+    ): Token
 
     addRecipe(
       name: String!,
@@ -84,7 +87,7 @@ export const typeDefs = gql`
 
     addRecipeToKitchen(
       email: String!,
-      _id: String!,
+      _recID: String!,
     ): User
 
     cookRecipe(

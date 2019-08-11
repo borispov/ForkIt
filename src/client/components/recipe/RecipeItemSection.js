@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import styled, {css, keyframes} from 'styled-components';
 import Btn from '../styling/Btn';
+import { Mutation } from 'react-apollo';
+import { COOK_RECIPE } from '../../../queries';
 
 const fadeIn = keyframes`
   from {
@@ -64,26 +66,59 @@ const CookBtn = styled(Btn)`
   }
 `
 
-const RecipeItemSection = ({ instructions, ingridients, isOpen }) => (
-  isOpen &&
-    <React.Fragment>
-      <Wrapper>
-        <FlexSection>
-          <Instructions>
-            {instructions}
-          </Instructions>
-          <div>
-            <ul>
-            {
-              ingridients.map(({type, amount}, i) => <li key={i}><Amount>{amount}</Amount>: <Type>{type}</Type></li>)
-            }
-            </ul>
-          </div>
-        </FlexSection>
-        <CookBtn>Cook Now!</CookBtn>
-      </Wrapper>
-      </React.Fragment>
-)
+
+const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => {
+
+  const [errorState, setErrorState] = useState(false)
+
+  const handleCook = (id, OK, mail, cookRecipe) => {
+    console.log('executing cookRecipe')
+    if (!id) {
+      console.log('no id received.')
+      return null
+    }
+    if (!OK) {
+      setErrorState(true)
+      return null
+    }
+    cookRecipe()
+  }
+
+  useEffect(() => {
+
+  }, [errorState])
+  return (
+    isOpen &&
+      <React.Fragment>
+        <Mutation mutation={COOK_RECIPE} variables={{ _recID: ID, email }}>
+
+        {(cookRecipe, {data}) => {
+
+          return (
+
+              <Wrapper>
+                <FlexSection>
+                  <Instructions>
+                    {instructions}
+                  </Instructions>
+                  <div>
+                    <ul>
+                    {
+                      ingridients.map(({type, amount}, i) => <li key={i}><Amount>{amount}</Amount>: <Type>{type}</Type></li>)
+                    }
+                    </ul>
+                  </div>
+                </FlexSection>
+                { errorState && <label>Already Cooked.</label> }
+                <CookBtn onClick={() => handleCook(ID, 'OK', email, cookRecipe)}>Cook Now!</CookBtn>
+              </Wrapper>
+          )
+        }
+      }
+      </Mutation>
+    </React.Fragment>
+  )
+}
 
 
 

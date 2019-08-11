@@ -49,7 +49,9 @@ const RecipeSchema = new Schema({
   lastCookedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+
+  followers: [String],
 
 })
 

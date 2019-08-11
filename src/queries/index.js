@@ -22,6 +22,30 @@ export const ADD_RECIPE = gql`
   }
 `
 
+export const COOK_RECIPE = gql`
+  mutation cookRecipe(
+    $_recID: String!,
+    $email: String!,
+  ) {
+    cookRecipe(
+      _recID: $_recID,
+      email: $email
+    ) {_recID}
+  }
+`
+
+export const ADD_TO_KITCHEN = gql`
+  mutation addRecipeToKitchen(
+    $_recID: String!,
+    $email: String!
+  ) {
+    addRecipeToKitchen(
+      _recID: $_recID,
+      email: $email
+    ) {_recID}
+  }
+`
+
 
 export const SIGNUP_USER = gql`
   mutation($firstName: String!, $lastName: String!, $email:String!, $password:String!) {
@@ -43,6 +67,7 @@ export const GET_CURRENT_USER = gql`
 export const GET_RECIPES = gql`
   query($author: String) {
     getAllRecipes(author: $author) {
+      _id,
       name,
       description,
       instructions,
