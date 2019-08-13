@@ -152,8 +152,8 @@ export const CardInstructions = ({ recipes }) => (
               <ol>
                 {
                   // TODO :: Use different key instead of index value
-                  recipes.ingridients.map((item, key) => 
-                    <li key={key}>
+                  recipes.ingridients.map((item, idx) => 
+                    <li key={idx}>
                       {item.amount} : {item.type} 
                     </li>
                   )

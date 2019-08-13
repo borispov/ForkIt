@@ -1,19 +1,15 @@
-import React, { Fragment } from 'react';
-import PageLayout from '../components/PageLayout';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Col, Row } from 'react-styled-flexboxgrid'
 import remcalc from 'remcalc';
 import styled from 'styled-components';
-// import Input from '../components/styling/Input';
+import { withRouter } from 'react-router-dom';
+import { Mutation } from 'react-apollo';
+import * as Cookie from 'js-cookie';
+
+import { SIGNUP_USER } from '../../queries';
 import Btn from '../components/styling/Btn';
 import { FormGroup, Label, Input } from '../components/Forms';
-
-const initialState = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  cpassword: '',
-}
+import PageLayout from '../components/PageLayout';
 
 const Wrapper = styled.div`
   max-width: 520px;
@@ -27,81 +23,131 @@ const FormWrapper = styled.div`
   flex-flow: column wrap;
 `
 
-const Button = styled.button`
-  
-`
+const initInputState = {
+  firstName: '',
+  lastName: '',
+  pw: '',
+  cpw: ''
+}
 
 
-class AddRecipe extends React.Component {
+// TODO: do some cleanup work with useEffect after the component unmounts.
+const SignUp = (props) => {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      ...initialState
-    }
+  const [inputs, setInput] = useState({...initInputState})
+  const [errors, setError] = useState({pwError: '', emailError: ''})
+  const [isValidating, setValidatin] = useState(false)
+
+  const handleChange = e => {
+    const { name, value } = e.target
+    setInput({
+      ...inputs,
+      [name]: value
+    })
   }
 
-  handleChange = (e) => {
-    console.log('Inside onchange handler ')
-    console.log(e.target.name)
+  useEffect(() =>
+    () => {
+      setInput({...initInputState})
+      setError({pwError: '', emailError: ''})
+  },[])
+
+  const handleSubmit = (e, signupUser) => {
+    e && e.preventDefault()
+    const { pw, cpw } = inputs
+    console.log(pw,cpw)
+    pwMatch(pw)(cpw) ?
+      signupUser().then(async ({ data }) => {
+        Cookie.set('token', data.signupUser.token)
+        await props.refetch()
+        props.history.push('/Home')
+      }) :
+      console.log('pw dont match. please fix this.')
   }
 
-  handleSubmit(e) {
-    e.preventDefault()
-    console.log('Submit handler ...')
+  const pwMatch = p1 => p2 => {
+    console.log(`p1: ${p1} and p2: ${p2}`)
+    return p1 === p2
   }
 
-  render() {
-    return (
-      <React.Fragment>
-        <PageLayout>
-          <Wrapper>
-            <Col>
-                <form
-                  onSubmit={this.handleSubmit}
-                >
+  return (
+    <div>
+      <PageLayout>
+        <Wrapper>
+          <Col>
+
+            <Mutation mutation={ SIGNUP_USER } variables={{
+              firstName: inputs.firstName,
+              lastName: inputs.lastName,
+              email: inputs.email,
+              password: inputs.pw
+            }} >
+
+              {(signupUser, {data}) => {
+                return (
+                  <form onSubmit={e => handleSubmit(e, signupUser)}>
                     <FormGroup>
                       <Input
-                        defaultValue={this.state.name}
-                        type="text" 
-                        name="firstName" 
-                        placeholder="First..." 
-                        onChange={this.handleChange}
+                        value={inputs.firstName}
+                        type="text"
+                        name="firstName"
+                        placeholder="First..."
+                        onChange={handleChange}
+                        minLength={3}
+                        required
                       />
                       <Input
-                        defaultValue={this.state.name}
-                        type="text" 
-                        name="lastName" 
-                        placeholder="Last ..." 
-                        onChange={this.handleChange}
+                        value={inputs.lastName}
+                        type="text"
+                        name="lastName"
+                        placeholder="Last ..."
+                        onChange={handleChange}
+                        required
+                        minLength={2}
                       />
                     <Input
                       placeholder="john@doe.com"
                       type="email"
                       name="email"
-                      onChange={this.handleChange}
+                      onChange={handleChange}
+                      required
                     />
                     <Input
+                      placeholder="password"
                       type="password"
-                      name="password"
-                      onChange={this.handleChange}
+                      name="pw"
+                      onChange={handleChange}
+                      minLength={6}
+                      required
                     />
                     <Input
-                      type="cpassword"
-                      name="cpassword"
-                      onChange={this.handleChange}
+                      placeholder="confirm password"
+                      type="password"
+                      name="cpw"
+                      onChange={handleChange}
+                      required
                     />
                   </FormGroup>
                   <FormGroup>
+                    {
+                      errors.pwError &&
+                        <Label>"Password don't match"</Label>
+                    }
                     <Btn type="submit">Register!</Btn>
                   </FormGroup>
-                </form>
-            </Col>
-          </Wrapper>
-        </PageLayout>
-      </React.Fragment>
-    )
-  }
+                  </form>
+
+                )
+              }}
+
+            </Mutation>
+
+          </Col>
+        </Wrapper>
+      </PageLayout>
+    </div>
+  )
+
 }
 
-export default AddRecipe
+export default withRouter(SignUp)

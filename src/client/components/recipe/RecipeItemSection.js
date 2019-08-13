@@ -104,7 +104,7 @@ const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => 
                   <div>
                     <ul>
                     {
-                      ingridients.map(({type, amount}, i) => <li key={i}><Amount>{amount}</Amount>: <Type>{type}</Type></li>)
+                      ingridients.map(({type, amount}, idx) => <li key={idx}><Amount>{amount}</Amount>: <Type>{type}</Type></li>)
                     }
                     </ul>
                   </div>

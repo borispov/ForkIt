@@ -69,7 +69,7 @@ const Piece = styled.span`
   }
 `
 
-const mapToItems = (rec, key) => <RecipeItemSection key data={rec} />
+const mapToItems = (rec, key) => <RecipeItemSection key={key} data={rec} />
 
 
 const RecipeItem = ({ recipeData }) => {

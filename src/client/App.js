@@ -5,6 +5,9 @@ import About from './pages/About';
 import Kitchen from './pages/Kitchen';
 import { recipes } from '../utils/fakedata';
 import AddRecipe from './pages/AddRecipe';
+import SignUp from './pages/SignUp'
+import Login from './pages/Login'
+import withSession from './hoc/withSession';
 
 const HelloTest = () => <h1>HelloTest</h1>
 
@@ -13,16 +16,20 @@ const initState = {
   visitors: 0,
 }
 
-export default ({state = initState}) => {
+const App = ({state = initState, refetch, session}) => {
   return (
     <>
       <Switch>
         <Route exact path="/" render={() => <Home showSearch {...initState} />} />
         <Route exact path="/home" render={() => <Home showSearch {...initState} />} />
+        <Route exact path="/signup" render={(props) => <SignUp {...props} refetch={refetch} />} />
+        <Route path="/login" render={props => <Login {...props} refetch={refetch} />} />
         <Route exact path="/about" render={() => <About />} />
-        <Route exact path="/kitchen" render={() => <Kitchen />} />
-        <Route exact path="/addrecipe" render={() => <AddRecipe />} />
+        <Route exact path="/kitchen" render={props => <Kitchen {...props} session={session} />} />
+        <Route exact path="/addrecipe" render={props => <AddRecipe {...props} session={session} refetch={refetch} />} />
       </Switch>
     </>
   );
 };
+
+export default withSession(App)

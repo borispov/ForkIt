@@ -5,8 +5,8 @@ import RecipeItem from './recipe/RecipeItem';
 import { Col, Row } from 'react-styled-flexboxgrid';
 import remcalc from 'remcalc';
 
-const mapRecipeCards = (rec, key) => <RecipeCard key recipeData={rec} />
-const mapRecipeItems = (rec ,key) => <RecipeItem key={key} recipeData={rec} />
+const mapRecipeCards = (rec, idx) => <RecipeCard key={idx} recipeData={rec} />
+const mapRecipeItems = (rec ,idx) => <RecipeItem key={idx} recipeData={rec} />
 
 const Wrapper = styled.div`
   max-width: 1140px;

@@ -17,9 +17,9 @@ export default new ApolloClient({
       uri: 'http://localhost:4000/graphql',
       fetch: 'fetch',
       credentials: 'same-origin',
-      // headers: {
-      //   cookie: process.browser ? req.header('Cookie') : null
-      // }
+      headers: {
+        cookie: process.browser ? req.header('Cookie') : null
+      }
     }),
     cache: process.browser
             ? new InMemoryCache().restore(window.__APOLLO_STATE__)

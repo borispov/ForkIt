@@ -46,23 +46,6 @@ export const ADD_TO_KITCHEN = gql`
   }
 `
 
-
-export const SIGNUP_USER = gql`
-  mutation($firstName: String!, $lastName: String!, $email:String!, $password:String!) {
-    signupUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password){token}
-  }
-`
-
-export const GET_CURRENT_USER = gql`
-  query {
-    getCurrentUser {
-      firstName,
-      lastName,
-      email
-    }
-  }
-`
-
 // the author variable is for fetching all recipes of specific users.
 export const GET_RECIPES = gql`
   query($author: String) {
@@ -82,3 +65,26 @@ export const GET_RECIPES = gql`
     }
   }
 `
+
+export const SIGNUP_USER = gql`
+  mutation($firstName: String!, $lastName: String!, $email:String!, $password:String!) {
+    signupUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password){token}
+  }
+`
+
+export const SIGNIN_USER = gql`
+  mutation($email: String!, $password: String!) {
+    signinUser(email: $email, password: $password) {token}
+  }
+`
+
+export const GET_CURRENT_USER = gql`
+  query {
+    getCurrentUser {
+      firstName,
+      lastName,
+      email
+    }
+  }
+`
+

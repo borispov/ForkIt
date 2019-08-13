@@ -14,7 +14,7 @@ import { createHttpLink } from 'apollo-link-http';
 import cors from 'cors';
 
 import template from './views/template';
-import client from './utils/apolloState';
+// import client from './utils/apolloState';
 import ServerRouter from './client/ServerRouter';
 import theme from './utils/theme';
 import { typeDefs } from './schema';
@@ -86,18 +86,18 @@ const HTML = (jsx, tags, state) => {
 
 app.get(['*/:param', '*'], (req,res) => {
 // app.get('#<{(|', (req,res) => {
-  // const client = new ApolloClient({
-  //   ssrMode: true,
-  //   link: createHttpLink({
-  //     uri: `http://localhost:3000/graphql`,
-  //     fetch: fetch,
-  //     credentials: 'same-origin',
-  //     headers: {
-  //       cookie: req.header('Cookie'),
-  //     },
-  //   }),
-  //   cache: new InMemoryCache(),
-  // });
+  const client = new ApolloClient({
+    ssrMode: true,
+    link: createHttpLink({
+      uri: `http://localhost:3000/graphql`,
+      fetch: fetch,
+      credentials: 'same-origin',
+      headers: {
+        cookie: req.header('Cookie'),
+      },
+    }),
+    cache: new InMemoryCache(),
+  });
 
   const URL_Param = req.params.param ? req.params.param : null
   const sheet = new ServerStyleSheet();

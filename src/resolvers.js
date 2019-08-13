@@ -84,6 +84,8 @@ export const resolvers = {
         throw new Error('Wrong password, try again')
       }
 
+      console.log('--Logging in user ::', email)
+
       return { token: createToken(user, 'secret', '43200') }
 
     },
