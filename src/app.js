@@ -37,7 +37,10 @@ app.use(async (req, res, next) => {
       const currentUser = await jwt.verify(token, 'secret' );
       req.currentUser = currentUser;
     } catch (err) {
-      console.error(err);
+      console.error('Error Occured In Token: ', err);
+      console.log('-------------------')
+      console.log('--Clearing Cookie--')
+      console.log('-------------------')
       res.clearCookie('token');
     }
   }
@@ -85,7 +88,7 @@ const HTML = (jsx, tags, state) => {
 
 
 app.get(['*/:param', '*'], (req,res) => {
-// app.get('#<{(|', (req,res) => {
+
   const client = new ApolloClient({
     ssrMode: true,
     link: createHttpLink({
@@ -117,7 +120,7 @@ app.get(['*/:param', '*'], (req,res) => {
   getDataFromTree(RootApp)
 
   const initialApolloState = client.extract()
-  console.log('this is the client state: ', initialApolloState)
+  // console.log('this is the client state: ', initialApolloState)
   // const jsx = renderToString(sheet.collectStyles(RootApp));
   const dom = renderToString(RootApp)
   const styleTags = sheet.getStyleTags();

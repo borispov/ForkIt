@@ -32,7 +32,7 @@ export const resolvers = {
     // get single recipe
     getRecipe: async(root, { id, name }, { Recipe }) => {
       const recipe = await Recipe.find({_id: id, name})
-      console.log(recipe)
+      // console.log(recipe)
       if (!recipe) throw new Error('recipe was not found')
       return recipe
     },
@@ -86,7 +86,7 @@ export const resolvers = {
 
       console.log('--Logging in user ::', email)
 
-      return { token: createToken(user, 'secret', '43200') }
+      return { token: createToken(user, 'secret', 43200) }
 
     },
 

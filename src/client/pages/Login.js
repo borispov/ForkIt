@@ -1,13 +1,23 @@
 import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 import { SIGNIN_USER } from '../../queries';
 import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
-import * as Cookie from 'js-cookie';
 import { NavLink } from 'react-router-dom';
+import { Col } from 'react-styled-flexboxgrid'
+import * as Cookie from 'js-cookie';
+
 import { FormGroup, Label, Input } from '../components/Forms';
 import Btn from '../components/styling/Btn';
 import PageLayout from '../components/PageLayout';
-import { Col } from 'react-styled-flexboxgrid'
+
+const Wrapper = styled.div`
+  max-width: 620px;
+  margin-top: 130px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+`
 
 const initState = {
   email: '',
@@ -16,32 +26,46 @@ const initState = {
 }
 
 const Login = (props, { refetch }) => {
+
   const [inputs, setInput] = useState({...initState})
   const cleanUp = () => setInput({...initState})
-  useEffect(() => () => cleanUp(),[])
+  useEffect(() => () => { 
+    console.log('Cleaning Up...')
+    return cleanUp()
+  },[])
 
   const handleSubmit = (e, signinUser) => {
-    e && e.preventDefault()
+    e.preventDefault()
+    console.log('Submitting...')
     signinUser().then(async ({data}) => {
-      Cookies.set('token', data.signinUser.token)
+      Cookie.set('token', data.signinUser.token)
       await props.refetch()
+      console.log('logged in successfuly')
+      props.history.push('/home')
     }).catch(() => {
+      console.log('error occured')
       useState({...initState, err: 'incorrect email or password'})
     })
   }
 
+  const handleChange = e => {
+    console.log('state before change: ', inputs)
+    const {name, value} = e.target
+    setInput({...inputs, [name]: value})
+  }
+
   return (
     <PageLayout>
+      <Wrapper>
         <Col>
-
-          <Mutation mutation={ SIGNUP_USER } variables={{
+          <Mutation mutation={ SIGNIN_USER } variables={{
             email: inputs.email,
             password: inputs.pw
           }} >
 
             {(signinUser, {data}) => {
               return (
-                <form onSubmit={e => handleSubmit(e, signupUser)}>
+                <form onSubmit={event => handleSubmit(event, signinUser)}>
                   <FormGroup>
                     <Input
                       value={inputs.email}
@@ -75,6 +99,7 @@ const Login = (props, { refetch }) => {
           </Mutation>
 
         </Col>
+      </Wrapper>
     </PageLayout>
   )
 }

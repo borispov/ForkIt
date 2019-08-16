@@ -9,9 +9,9 @@ import { Query } from 'react-apollo';
 
 const withAuth = condFn => Component => props => {
 
-  if (props.testing = 'true'){
-    return <Component {...props />}
-  }
+  // if (props.testing = 'true'){
+  //   return <Component {...props} />
+  // }
 
   return (
 
@@ -23,13 +23,16 @@ const withAuth = condFn => Component => props => {
 
         if (typeof document !== 'undefined') {
 
-          const tokenExp = Cookies.get('token')
-
-          if (tokenExp == undefined) return <Login {...props} refetch={refetch} />
+          const tokenExp = Cookie.get('token')
+          if (tokenExp == undefined) {
+            return <Login {...props} refetch={refetch} />
+          }
 
         }
 
-        if (props.session.getCurrentUser == null) return <Login {...props} refetch={refetch} />
+        if (props.session.getCurrentUser == null) {
+          return <Login {...props} refetch={refetch} />
+        }
 
         return condFn(data) ? <Component {...props} /> : <Redirect to="/login" />
 

@@ -30,7 +30,9 @@ const ClientRouter = ({ state={} }) => {
   );
 };
 
+// state={window.__STATE__} 
+
 hydrate(
-  <ClientRouter state={window.__STATE__} />, 
+  <ClientRouter />,
   document.getElementById('root')
 );

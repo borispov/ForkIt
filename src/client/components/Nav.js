@@ -5,6 +5,7 @@ import remcalc from 'remcalc';
 import AddRecipeBtn from './AddRecipeBtn';
 import { navLinks } from '../../utils/config';
 import Search from './styling/Search';
+import withSession from '../hoc/withSession';
 
 import PropTypes from 'prop-types';
 
@@ -93,14 +94,31 @@ const mapLinksToList = (link, key) => (
   </Item>
 )
 
-export default () => (
+const NotLoggedInComps = (
+  <React.Fragment>
+    <StyledLink noline='true' bold='true' to="/Login">
+      <MySpan>Login</MySpan>
+    </StyledLink>
+    <StyledLink noline='true' bold='true' to="/signup">
+      <MySpan>Registration</MySpan>
+    </StyledLink>
+  </React.Fragment>
+)
+
+const LoggedInComps = (
+  <React.Fragment>
+    <StyledLink noline='true' bold='true' to="/logout">
+      <MySpan>Logout</MySpan>
+    </StyledLink>
+  </React.Fragment>
+)
+
+const Nav = ({ session }) => (
   <Wrapper>
     <React.Fragment>
-      <Logo to="/home">
-        <h1>ForkIt!</h1>
-      </Logo>
       <Search asNav='asNav' />
     </React.Fragment>
+
     <List>
       {
         navLinks.map(mapLinksToList)
@@ -109,14 +127,16 @@ export default () => (
         <AddRecipeBtn />
       </Link>
       <div>
-        <StyledLink noline='true' bold='true' to="/Login">
-          <MySpan>Login</MySpan>
-        </StyledLink>
-        <StyledLink noline='true' bold='true' to="/Register">
-          <MySpan>Registration</MySpan>
-        </StyledLink>
+        {
+          session.getCurrentUser === null ?
+            NotLoggedInComps :
+            LoggedInComps
+        }
+        {console.log(session.getCurrentUser)}
       </div>
     </List>
   </Wrapper>
 
 )
+
+export default withSession(Nav)

@@ -1,18 +1,25 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import RecipeList from '../components/RecipeList';
 import PageLayout from '../components/PageLayout';
 import { Query } from 'react-apollo';
 import { GET_RECIPES } from '../../queries';
+import withAuth from '../hoc/withAuth';
 
 const homeProps = {
   title: 'Da- Kitchen',
 }
 
-const Kitchen = ({recipes}, props) => {
+const Kitchen = ({recipes, session}, props) => {
   return (
     <PageLayout {...homeProps} showSearch={false}>
+      {
+        console.log(
+          session.getCurrentUser.email
+        )
+      }
 
-      <Query query={GET_RECIPES} variables={{author: 'anonymous'}}>
+      <Query query={GET_RECIPES} variables={{author: session.getCurrentUser.email}}>
 
         {({ loading, error, data }) => {
 
@@ -31,4 +38,4 @@ const Kitchen = ({recipes}, props) => {
 
 };
 
-export default Kitchen;
+export default withAuth(session => session && session.getCurrentUser)(withRouter(Kitchen))
