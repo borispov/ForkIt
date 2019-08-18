@@ -70,13 +70,14 @@ export const Select = styled.select`
   color: palevioletred;
   &::placeholder {
     color: gainsboro;
+    font-size: 13px;
   }
 `
 
 export const TextArea = styled.textarea`
   max-width: auto;
   line-height: 24px;
-  width: 250px;
+  width: 280px;
   height: auto;
   color: black;
   border-radius: 6px;
@@ -89,7 +90,8 @@ export const TextArea = styled.textarea`
   transition: width 0.15s ease-in-out;
   overflow: auto;
   &::placeholder {
-    color: gainsboro;
+    color: ${props => props.theme.darkgray}C9;
+    font-size: 16px;
   }
   &:focus {
     width: 350px;

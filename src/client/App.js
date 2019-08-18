@@ -5,6 +5,7 @@ import About from './pages/About';
 import Kitchen from './pages/Kitchen';
 import { recipes } from '../utils/fakedata';
 import AddRecipe from './pages/AddRecipe';
+import RecipeView from './pages/RecipeView';
 import SignUp from './pages/SignUp';
 import SignOut from './pages/Signout';
 import Login from './pages/Login';
@@ -29,6 +30,7 @@ const App = ({state = initState, refetch, session}) => {
         <Route exact path="/about" render={() => <About />} />
         <Route exact path="/kitchen" render={props => <Kitchen {...props} session={session} />} />
         <Route exact path="/addrecipe" render={props => <AddRecipe {...props} session={session} refetch={refetch} />} />
+        <Route path="/recipe/:id" render={props => <RecipeView {...props} refetch={refetch} session={session} />} />
       </Switch>
     </>
   );

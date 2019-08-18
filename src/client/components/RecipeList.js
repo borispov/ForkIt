@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-top: ${remcalc(150)};
+
 `
 
 const RowWrapper = styled.div`

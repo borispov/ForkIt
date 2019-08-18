@@ -66,6 +66,25 @@ export const GET_RECIPES = gql`
   }
 `
 
+export const GET_RECIPE = gql`
+  query($_id: String!) {
+    getRecipe(_id: $_id) {
+      _id,
+      name,
+      description,
+      instructions,
+      difficulty,
+      image,
+      time,
+      author,
+      ingridients {
+        type
+        amount
+      }
+    }
+  }
+`
+
 export const SIGNUP_USER = gql`
   mutation($firstName: String!, $lastName: String!, $email:String!, $password:String!) {
     signupUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password){token}

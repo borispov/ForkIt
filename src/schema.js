@@ -22,7 +22,7 @@ export const typeDefs = gql`
 
   # Can Integrate Total Cooks by all users. 
   type Recipe {
-    _id: ID
+    _id: String!
     name: String!
     description: String!
     instructions: String!
@@ -55,7 +55,7 @@ export const typeDefs = gql`
     getUserProfile: User
     getAllUsers: [User]
     profilePage(Email: String!): User
-    getRecipe(_id: ID!): Recipe
+    getRecipe(_id: String!): Recipe
     getAllRecipes(author: String): [Recipe]
   }
 

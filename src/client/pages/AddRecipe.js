@@ -57,10 +57,8 @@ const AddBtn = styled(Btn)`
 `
 
 // TODO: Think of a way to implement this feature. 
-// User can add as many inputs as he needs. 
-// Any time he adds, a new input appears. 
-//
 const isEq = v1 => v2 => v1 === v2
+// It's sole job is to handle Ingridient Input View.
 const renderIngridientInput = values => handler => btnHandler => {
 
   return values
@@ -91,6 +89,9 @@ const renderIngridientInput = values => handler => btnHandler => {
     ))
 }
 
+// only checks if instructions follow Line Break convention. if yes return true, if fails return false
+const isValidInstructions = instructions => /\r|\n/.test(instructions)
+
 class AddRecipe extends React.Component {
 
   constructor(props) {
@@ -115,6 +116,7 @@ class AddRecipe extends React.Component {
     const { minRows, maxRows } = this.state
     const lineHeight = 24
     const prevRows = this.state.rows
+    const instructions = e.target.value
     e.target.rows = minRows
     const currentRows = ~~(e.target.scrollHeight / lineHeight)
 
@@ -127,7 +129,8 @@ class AddRecipe extends React.Component {
     }
     this.setState({
       rows: currentRows < maxRows ? currentRows : maxRows,
-      instructions: e.target.value
+      // instructions: e.target.value
+      instructions: instructions
     })
   }
 
@@ -183,16 +186,18 @@ class AddRecipe extends React.Component {
 
   // Bit reversed implementation of validation function, lol.
   isValidForm = (name, ingridients, instructions, difficulty) => {
-    const isValid = !name || !ingridients || !instructions || !difficulty
+    const isValid = !name || !ingridients || !instructions || !difficulty || !isValidInstructions(instructions)
     return !isValid
   }
 
   handleSubmit = (e, addRecipe) => {
+    const { name, ingridients, instructions, difficulty } = this.state
     e.preventDefault()
-    // const isVal = this.isValidForm(name,instructions,ingridients,difficulty)
-    const isVal = true
+    const isVal = this.isValidForm(name,instructions,ingridients,difficulty)
+    // for debugging reasons :: 
+    // const isVal = true
     if (!isVal) {
-      this.setState({errorMsg: 'Please Fill The Form'})
+      this.setState({errorMsg: 'Please Fill The Form Correctly'})
       return null
     }
     console.log(this.state)
@@ -275,6 +280,7 @@ class AddRecipe extends React.Component {
                           </div>
                           <Label>Instructions:</Label>
                           <TextArea
+                            placeholder="Put each step on its own line"
                             rows={this.state.rows}
                             name="ingridientAmount"
                             onChange={this.handleTextChange}
@@ -305,12 +311,3 @@ class AddRecipe extends React.Component {
 }
 
 export default withRouter(AddRecipe)
-
-
-// -- when you start adding an ingridient: it adds an object to an array.
-// ings: {
-// [
-//  {id: 1, type: 'eggs', amount: 10},
-//  {id: 2, type: 'salt', amount: '2 tbls'}
-// ]
-// }

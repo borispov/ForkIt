@@ -1,4 +1,6 @@
 import React from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
+import RecipeView from '../../pages/RecipeView';
 
 const {CardWrapper,
   CardHeading,
@@ -11,26 +13,27 @@ const {CardWrapper,
 } = require('./RecipeCardStyles');
 const { Image } = require('../image/Image');
 
-export default ({recipeData}) => {
-  const { image, name, instructions, time, difficulty, ingridients, description, author } = recipeData;
+export default withRouter(({recipeData, history}) => {
+  const { image, name, instructions, time, difficulty, ingridients, description, author, _id } = recipeData;
   const recipes = {
     time, difficulty, ingridients, instructions
   }
   return (
     <CardWrapper>
-      <CardHeader>
+      <CardHeader onClick={() => history.push(`/recipe/${recipeData._id}`)} >
         <CardHeading>{name || ''}</CardHeading>
         {description &&
           <CardHeadingSub>{description || ''}</CardHeadingSub>}
           <CardAuthor>{author || 'no named'}</CardAuthor>
       </CardHeader>
 
-      <Image image={image} />
+      <Image image={image}/>
       <CardBody>
         <CardInstructions recipes={recipes} />
         {/*<CardParagraph>{recipeData.description}</CardParagraph> */}
       </CardBody>
     </CardWrapper>
 
-  );
-};
+  )
+}
+)

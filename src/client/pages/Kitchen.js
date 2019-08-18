@@ -15,7 +15,7 @@ const Kitchen = ({recipes, session}, props) => {
     <PageLayout {...homeProps} showSearch={false}>
       {
         console.log(
-          session.getCurrentUser.email
+          recipes
         )
       }
 
