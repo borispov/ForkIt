@@ -22,6 +22,7 @@ export const CardWrapper = styled.div`
   box-shadow: 0 0 10px rgba(20,20,20,0.1) 0 0 20px rgba(10,10,10,0.2);
   border-radius: 2px;
   border-radius: 6px;
+  z-index: 1;
 `
 
 export const CardHeader = styled.header`
@@ -45,11 +46,13 @@ export const CardHeading = styled.h1`
   font-weight: bold;
 `
 
-export const CardHeadingSub = styled.h3`
-  font-size: 18px;
+export const CardHeadingSub = styled.h4`
+  font-size: 16px;
   font-weight: ${props => props.SubFontSize || '400'};
   padding-top: -8px;
   padding-bottom: 8px;
+  font-weight: 300;
+  color: ${props => props.theme.main}BB;
 `
 
 export const CardBody = styled.div`
@@ -106,20 +109,20 @@ const IngWrp = styled(InfoSpan)`;
 `
 
 const IngridientListWrapper = styled.div`
-  width: ${remcalc(200)};
+  max-width: max-content;
   height: auto;
   opacity: 0;
   transition: all 0.3s ease-in-out;
-  background-color: rgba(20,20,20,0.4);
+  background-color: rgba(20,20,20,0.8);
   color: ${props => props.theme.white};
   font-size: ${remcalc(16)};
   font-family: 'Mono Space';
   font-weight: bold;
   position: absolute;
   bottom: 140%;
-  right: -38%;
+  right: -50%;
   z-index: 1;
-  transform: translateX(-10%);
+  padding-left: 10px;
   ${IconsWrapper}:hover & {
     opacity: 0.8;
   }
@@ -133,7 +136,7 @@ export const CardInstructions = ({ recipes }) => (
         <Col md={4} xs={4} lg={4} >
           <IconsWrapper>
               <InfoIcon icon={faClock} />
-              <InfoSpan>{recipes.time} min</InfoSpan>
+              <InfoSpan>{recipes.time} דק׳</InfoSpan>
           </IconsWrapper>
         </Col>
 
@@ -147,16 +150,12 @@ export const CardInstructions = ({ recipes }) => (
         <Col md={4} xs={4} lg={4}>
           <IconsWrapper>
             <IngridientIcon icon={faStackExchange} />
-            <IngWrp>Ingridients</IngWrp>
+            <IngWrp>מרכיבים</IngWrp>
             <IngridientListWrapper>
               <ol>
                 {
-                  // TODO :: Use different key instead of index value
-                  recipes.ingridients.map((item, idx) => 
-                    <li key={idx}>
-                      {item.amount} : {item.type} 
-                    </li>
-                  )
+                  recipes.ingridients.split('\n')
+                    .map((item, idx) => <li key={idx}>{item}</li> )
                 }
               </ol>
             </IngridientListWrapper>
@@ -166,7 +165,15 @@ export const CardInstructions = ({ recipes }) => (
       <hr />
       <Row>
         <CardParagraph nomg lineHeight={'1.15'}>
-          {recipes.instructions}
+          <ol>
+            {
+              recipes.instructions
+                .split('\n')
+                .map((step, index) => (
+                  <p key={index}>{index}){step}</p>
+                ))
+            }
+          </ol>
         </CardParagraph>
       </Row>
     </Col>

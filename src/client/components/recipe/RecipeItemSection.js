@@ -43,16 +43,6 @@ const Instructions = styled.p`
   color: ${props => props.theme.main};
 `
 
-const Amount = styled.span`
-  font-weight: 700;
-  font-style: italic;
-  color: #191919;
-`
-const Type = styled.span`
-  font-weight: 400;
-  color: #191919;
-`
-
 const CookBtn = styled(Btn)`
   background: ${props => props.theme.cta};
   color: ${props => props.theme.darkgray};
@@ -67,6 +57,7 @@ const CookBtn = styled(Btn)`
 `
 
 
+// TODO: DRY!
 const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => {
 
   const [errorState, setErrorState] = useState(false)
@@ -99,18 +90,18 @@ const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => 
               <Wrapper>
                 <FlexSection>
                   <Instructions>
-                    {instructions}
+                    {instructions.split('\n').map((step, idx) => <p key={idx+1}>{`${idx}) ${step}`}</p>)}
                   </Instructions>
                   <div>
                     <ul>
                     {
-                      ingridients.map(({type, amount}, idx) => <li key={idx}><Amount>{amount}</Amount>: <Type>{type}</Type></li>)
+                      ingridients.split('\n').map((ingr, idx) => <li key={idx}>{ingr}</li>)
                     }
                     </ul>
                   </div>
                 </FlexSection>
                 { errorState && <label>Already Cooked.</label> }
-                <CookBtn onClick={() => handleCook(ID, 'OK', email, cookRecipe)}>Cook Now!</CookBtn>
+                <CookBtn onClick={() => handleCook(ID, 'OK', email, cookRecipe)}>לבשל עכשיו!</CookBtn>
               </Wrapper>
           )
         }
@@ -119,8 +110,5 @@ const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => 
     </React.Fragment>
   )
 }
-
-
-
 
 export default RecipeItemSection

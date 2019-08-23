@@ -90,7 +90,7 @@ const RecipeItem = ({ recipeData }) => {
           <Piece>{author}</Piece>
           <Piece>{time.split('\n').join(' ')}</Piece>
           <Piece>{difficulty}</Piece>
-          <Piece>{lastCooked || 'NOT cooked'}</Piece>
+          <Piece>{lastCooked || ''}</Piece>
         </ListItem>
         <RecipeItemSection
           ID={_id}

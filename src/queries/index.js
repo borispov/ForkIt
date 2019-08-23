@@ -1,23 +1,19 @@
 import gql from 'graphql-tag';
 
 export const ADD_RECIPE = gql`
-  mutation addRecipe(
+  mutation AddRecipe(
     $name: String!,
     $description: String!,
     $instructions: String!,
-    $difficulty: Difficulty!,
+    $difficulty: String!,
+    $time: String,
+    $author: String,
     $image: String,
-    $ingridients: [Ingr],
+    $ingridients: String!,
   ) {
-    addRecipe(
-      name: $name,
-      description: $description,
-      instructions: $instructions,
-      difficulty: $difficulty,
-      image: $image,
-      ingridients: $ingridients
-    ) {
+    addRecipe(name: $name, description: $description, instructions: $instructions, difficulty: $difficulty, ingridients: $ingridients, image: $image, author: $author, time: $time) {
       name
+      description
     }
   }
 `
@@ -58,10 +54,7 @@ export const GET_RECIPES = gql`
       image,
       time,
       author,
-      ingridients {
-        type
-        amount
-      }
+      ingridients
     }
   }
 `
@@ -77,10 +70,7 @@ export const GET_RECIPE = gql`
       image,
       time,
       author,
-      ingridients {
-        type
-        amount
-      }
+      ingridients
     }
   }
 `

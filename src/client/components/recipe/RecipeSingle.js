@@ -103,13 +103,13 @@ const TitleWithBorder = ({ children }) => (
 
 const parseInstructions = instr => {
   return /\r|\n/.test(instr) ?
-    <ul>
+    <ol>
       {
         instr
           .split(/\n/)
           .map((step, key) => <li key={key}>{step}</li>)
       }
-    </ul>
+    </ol>
   : `Unfortunately, Instructions weren't added according to rules, hence this might looks disorganized and scattered: 
     ${instr}`
 }
@@ -122,7 +122,7 @@ export default ({data}) => (
     <IconsWrapper>
       <IconDiv>
         <Icon icon={faClock} />
-        <Label>{data.time}</Label>
+        <Label>{data.time} דק׳</Label>
       </IconDiv>
       <IconDiv>
         <Icon icon={faCube} />
@@ -133,24 +133,27 @@ export default ({data}) => (
       <img src={data.image} width="420" height="420" alt="recipe img" />
       <Caption>{data.image.credit || `${data.name} Image By Unknown`}</Caption>
     </ImgWrap>
-    <TitleWithBorder> Instructions </TitleWithBorder>
+    <TitleWithBorder> מרכיבים </TitleWithBorder>
+    <Ingridients>
+      <ul>
+       {
+          data.ingridients
+            .trim()
+            .split('\n')
+            .map((ingridient, i) =>
+              <div key={i}>
+                 <li style={{fontSize: '14px', fontWeight: '300'}}>{ingridient}</li>
+              </div>
+            )
+        }
+      </ul>
+    </Ingridients>
+    <TitleWithBorder> הוראות הכנה </TitleWithBorder>
     <Instructions>
       {
         parseInstructions(data.instructions)
       }
     </Instructions>
-    <TitleWithBorder> Ingridients </TitleWithBorder>
-    <Ingridients>
-     {
-        data.ingridients
-          .map((x, i) =>
-            <div key={i}>
-              <span>{x.type} :</span>
-               <span style={{fontSize: '14px', fontWeight: '300'}}>{x.amount}</span>
-            </div>
-          )
-      }
-    </Ingridients>
   </RecipeContainer>
 )
 

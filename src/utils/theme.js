@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const theme = {
+  dir: 'rtl',
   font: 'Montserrat',
   lineHeight: '1.45',
   card: {

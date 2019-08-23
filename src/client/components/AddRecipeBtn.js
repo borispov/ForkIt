@@ -16,9 +16,10 @@ const Btn = styled.button`
   &:hover { 
     box-shadow: 0 2px 12px 4px rgba(0,0,0,0.1);
   }
+  margin: 0 6px;
 `
 
-const BtnTxt = 'Add Recipe';
+const BtnTxt = 'הוסף מתכון';
 
 export default () => (
   <Btn>

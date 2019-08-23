@@ -30,7 +30,6 @@ export default withRouter(({recipeData, history}) => {
       <Image image={image}/>
       <CardBody>
         <CardInstructions recipes={recipes} />
-        {/*<CardParagraph>{recipeData.description}</CardParagraph> */}
       </CardBody>
     </CardWrapper>
 

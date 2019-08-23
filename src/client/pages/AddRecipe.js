@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
-import { Col, Row, Grid } from 'react-styled-flexboxgrid'
-import remcalc from 'remcalc';
+import { Col, Row } from 'react-styled-flexboxgrid'
 import styled from 'styled-components';
 import Btn from '../components/styling/Btn';
 import { FormGroup, Label, Input, Select, TextArea } from '../components/Forms';
@@ -11,29 +10,11 @@ import { ADD_RECIPE } from '../../queries';
 import gql from 'graphql-tag'
 import * as Cookie from 'js-cookie';
 
-const ADDR = gql`
-  mutation AddRecipe(
-    $name: String!,
-    $description: String!,
-    $instructions: String!,
-    $difficulty: String!,
-    $time: String,
-    $author: String,
-    $image: String,
-    $ingridients: [Ingr],
-  ) {
-    addRecipe(name: $name, description: $description, instructions: $instructions, difficulty: $difficulty, ingridients: $ingridients, image: $image, author: $author, time: $time) {
-      name
-      description
-    }
-  }
-`
-
 const initialState = {
   name: '',
   description: '',
   image: '',
-  difficulty: 'Choose Difficulty',
+  difficulty: 'תבחר רמת קושי',
   author: '',
   time: 'N/A'
 }
@@ -47,6 +28,9 @@ const Wrapper = styled.div`
 const FormWrapper = styled.div`
   display: flex;
   margin: 0 auto;
+  > * {
+    text-align: right;
+  }
 `
 
 const AddBtn = styled(Btn)`
@@ -56,41 +40,11 @@ const AddBtn = styled(Btn)`
   font-size: 13px;
 `
 
-// TODO: Think of a way to implement this feature. 
 const isEq = v1 => v2 => v1 === v2
-// It's sole job is to handle Ingridient Input View.
-const renderIngridientInput = values => handler => btnHandler => {
-
-  return values
-    .map((obj, i) => (
-      <div key={i} style={{display: 'flex', justifyContent: 'space-between', width: '250px'}}>
-        <Input
-          key={i + 't'}
-          data-key={i + 't'}
-          animate={true}
-          value={obj.type}
-          name="iType"
-          placeholder="type"
-          width="auto"
-          onChange={handler}
-        />
-        <Input
-          key={i + 'a'}
-          data-key={i + 'a'}
-          animate={true}
-          value={obj.amount}
-          name="iAmount"
-          placeholder="amnt"
-          width='33px'
-          onChange={handler}
-        />
-        <AddBtn type="button" onClick={btnHandler}>add</AddBtn>
-    </div>
-    ))
-}
 
 // only checks if instructions follow Line Break convention. if yes return true, if fails return false
-const isValidInstructions = instructions => /\r|\n/.test(instructions)
+const hasNewLine = str => /\r|\n/.test(str)
+const ingPlaceholder = 'כל מרכיב בשורה חדשה:\n5 ביצים\nכוס חלב'
 
 class AddRecipe extends React.Component {
 
@@ -104,19 +58,20 @@ class AddRecipe extends React.Component {
         nameErr: null,
         instructions: null,
       },
-      rows: 5,
-      minRows: 5,
-      maxRows: 25,
+      ingridientRows: 10,
+      instructionRows: 10,
+      minRows: 10,
+      maxRows: 30,
       instructions: '',
-      ingridients: [{}],
+      ingridients: '',
     }
   }
 
   handleTextChange = e => {
+    const { name, value } = e.target
     const { minRows, maxRows } = this.state
     const lineHeight = 24
-    const prevRows = this.state.rows
-    const instructions = e.target.value
+    const prevRows = this.state[name + 'Rows']
     e.target.rows = minRows
     const currentRows = ~~(e.target.scrollHeight / lineHeight)
 
@@ -128,9 +83,8 @@ class AddRecipe extends React.Component {
         e.target.scrollTop = e.target.scrollHeight
     }
     this.setState({
-      rows: currentRows < maxRows ? currentRows : maxRows,
-      // instructions: e.target.value
-      instructions: instructions
+      [name + 'rows']: currentRows < maxRows ? currentRows : maxRows,
+      [name]: value
     })
   }
 
@@ -153,57 +107,31 @@ class AddRecipe extends React.Component {
     )
   }
 
-  addIngridient = () => {
-    const ing = this.state.ingridients
-    const { iType, iAmount } = this.state
-    const isErr = iType === undefined
-
-    if (isErr){
-      this.setState(prevState => ({
-        ...prevState,
-        errorMsg: {
-          ...errorMsg,
-          ingErr: 'Please specify ingridient'
-        }
-      }))
-
-      return null
-    }
-
-    const ingObj = { type: iType, amount: iAmount || '' }
-    const newIng = [ingObj, ...ing]
-    this.setState(prevState => ({
-      ...prevState,
-      iType: '',
-      iAmount: '',
-      ingridients: newIng,
-      errorMsg: {
-        ...prevState.errorMsg,
-        ingErr: null
-      }
-    }))
-  }
-
   // Bit reversed implementation of validation function, lol.
   isValidForm = (name, ingridients, instructions, difficulty) => {
-    const isValid = !name || !ingridients || !instructions || !difficulty || !isValidInstructions(instructions)
+    const isValid = !name || (!ingridients || !hasNewLine(ingridients)) || (!instructions || !hasNewLine(instructions)) || !difficulty
     return !isValid
   }
 
   handleSubmit = (e, addRecipe) => {
     const { name, ingridients, instructions, difficulty } = this.state
     e.preventDefault()
-    const isVal = this.isValidForm(name,instructions,ingridients,difficulty)
-    // for debugging reasons :: 
-    // const isVal = true
+    const isVal = this.isValidForm(name,ingridients, instructions, difficulty)
     if (!isVal) {
-      this.setState({errorMsg: 'Please Fill The Form Correctly'})
+      this.setState(prevState => ({
+        ...prevState,
+        errorMsg: {
+          ...prevState.errorMsg,
+          instructions: "נא למלא את התיבות"
+        }
+      }))
       return null
     }
-    console.log(this.state)
     addRecipe()
       .then(({data}) =>{
         console.log('succesfully added recipe to the database...')
+        //TODO: Can Add A Spinner to mimic a progress of adding recipe to database.
+        // Can add setTimeout func
         this.props.history.push('/home')
       })
       .catch(() => 'Ran Into An Error Mutating Data')
@@ -221,7 +149,7 @@ class AddRecipe extends React.Component {
           <Wrapper>
             <Col>
 
-              <Mutation mutation={ADDR} variables={{ time, ingridients: ingridients.slice(0,-1), name, instructions, difficulty, description, image }} >
+              <Mutation mutation={ ADD_RECIPE } variables={{ time, ingridients, name, instructions, difficulty, description, image }} >
 
                 {(addRecipe, {data}) => {
 
@@ -229,7 +157,8 @@ class AddRecipe extends React.Component {
                     <FormWrapper>
                       <Col>
                         <FormGroup>
-                          <Label> Recipe's Name:</Label>
+                          <Label> שם המתכון: </Label>
+                          {/* <Label> Recipe's Name:</Label> */}
                           <Input
                             defaultValue={this.state.name}
                             type="text" 
@@ -237,52 +166,51 @@ class AddRecipe extends React.Component {
                             placeholder="Title" 
                             onChange={this.handleChange}
                           />
-                          <Label>Describe Your Dish: </Label>
+                          {/* <Label>Describe Your Dish: </Label> */}
+                          <Label>תיאור המנה: </Label>
                           <Input
                             defaultValue={this.state.description}
                             type="text"
                             name="description"
-                            placeholder="An Italian Masterpiece, Great For Diner"
                             onChange={this.handleChange}
                           />
-                          <Label>Difficulty:</Label>
+                          <Label>רמת קושי:</Label>
                           <Select value={this.state.difficulty} onChange={this.handleSelect}>
-                            <option value='HARD'>-HARD-</option>
-                            <option value='MEDIUM'>-MEDIUM-</option>
-                            <option value='EASY'>-EASY-</option>
+                            <option value='HARD'>קשה</option>
+                            <option value='MEDIUM'>בינוני</option>
+                            <option value='EASY'>קל</option>
                           </Select>
                           <Input
                             defaultValue=''
                             type='text'
                             name="image"
-                            placeholder="Image URL"
+                            placeholder="לינק לתמונה"
                             onChange={this.handleChange}
                           />
-                          <Label>How Long To Cook: (in minutes!) </Label>
+                          <Label>זמן הכנה (בדקות) </Label>
                           <Input
                             defaultValue=''
                             type='text'
                             name="time"
-                            placeholder="120 minutes / 15 minutes, minutes only."
+                            placeholder="דוג׳: שעתיים הכנה = 120 דקות"
                             onChange={this.handleChange}
                           />
                         </FormGroup>
                       </Col>
                       <Col>
                         <FormGroup>
-                          <Label>Ingridients:</Label>
-                          <div style={{display: 'flex', flexDirection: 'column'}}>
-                            {
-                              renderIngridientInput(ingridients)(this.handleChange)(this.addIngridient)
-                            }
-                            {this.state.errorMsg.ingErr && <Label>{this.state.errorMsg.ingErr}</Label>}
-                            {/* }<Btn width="250px" type='button' onClick={this.addIngridient}>Add MORE</Btn>*/}
-                          </div>
-                          <Label>Instructions:</Label>
+                          <Label>מרכיבים: </Label>
+                            <TextArea
+                              placeholder={ingPlaceholder}
+                              rows={this.state.rows}
+                              name="ingridients"
+                              onChange={this.handleTextChange}
+                            />
+                          <Label>הוראות הכנה</Label>
                           <TextArea
-                            placeholder="Put each step on its own line"
+                            placeholder="כל שלב בשורה חדשה"
                             rows={this.state.rows}
-                            name="ingridientAmount"
+                            name="instructions"
                             onChange={this.handleTextChange}
                           />
                         </FormGroup>
@@ -293,7 +221,7 @@ class AddRecipe extends React.Component {
                           anyError &&
                             <Label style={{textAlign: 'center', color: 'red'}}>{ anyError }</Label>
                         }
-                      <Btn type="submit">Add Dish!</Btn>
+                      <Btn type="submit">הוסף מתכון!</Btn>
                     </div>
                   </form>
                   )

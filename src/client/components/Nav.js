@@ -97,10 +97,10 @@ const mapLinksToList = (link, key) => (
 const NotLoggedInComps = (
   <React.Fragment>
     <StyledLink noline='true' bold='true' to="/Login">
-      <MySpan>Login</MySpan>
+      <MySpan>התחבר</MySpan>
     </StyledLink>
     <StyledLink noline='true' bold='true' to="/signup">
-      <MySpan>Registration</MySpan>
+      <MySpan>הרשמה</MySpan>
     </StyledLink>
   </React.Fragment>
 )
@@ -108,17 +108,13 @@ const NotLoggedInComps = (
 const LoggedInComps = (
   <React.Fragment>
     <StyledLink noline='true' bold='true' to="/logout">
-      <MySpan>Logout</MySpan>
+      <MySpan>התנתק</MySpan>
     </StyledLink>
   </React.Fragment>
 )
 
 const Nav = ({ session }) => (
   <Wrapper>
-    <React.Fragment>
-      <Search asNav='asNav' />
-    </React.Fragment>
-
     <List>
       {
         navLinks.map(mapLinksToList)
@@ -132,9 +128,13 @@ const Nav = ({ session }) => (
             NotLoggedInComps :
             LoggedInComps
         }
-        {console.log(session.getCurrentUser)}
+        {/* {console.log(session.getCurrentUser)} */}
       </div>
     </List>
+    <React.Fragment>
+      <Search asNav='asNav' />
+    </React.Fragment>
+
   </Wrapper>
 
 )

@@ -71,7 +71,7 @@ const Login = (props, { refetch }) => {
                       value={inputs.email}
                       type="email"
                       name="email"
-                      placeholder="Email"
+                      placeholder="אימייל"
                       onChange={handleChange}
                       required
                     />
@@ -79,7 +79,7 @@ const Login = (props, { refetch }) => {
                       value={inputs.pw}
                       type="password"
                       name="pw"
-                      placeholder="Password"
+                      placeholder="סיסמא"
                       onChange={handleChange}
                       required
                     />
@@ -87,7 +87,7 @@ const Login = (props, { refetch }) => {
                 <FormGroup>
                   {
                     inputs.err &&
-                      <Label>"Password don't match"</Label>
+                      <Label>"סיסמא לא תואמת"</Label>
                   }
                   <Btn type="submit">Login</Btn>
                 </FormGroup>

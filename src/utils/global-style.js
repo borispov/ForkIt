@@ -17,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
         // padding-bottom: ${remcalc(40)};
         background-color: ${props => props.theme.lightoverlay};
         overflow-x: hidden;
+        direction: rtl;
   }
 
   code {

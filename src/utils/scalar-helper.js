@@ -5,9 +5,8 @@ const checkError = (op, alt) => {
       return alt
   }
 }
-const serialize = val => val instanceof Date ? value.getTime() : null
-const parseValue = val => 
-  checkError(() => val == null ? null : new Date(val), null)
+const serialize = val => val instanceof Date ? val.getTime() : null
+const parseValue = val => checkError(() => val == null ? null : new Date(val), null)
 const parseLiteral = ast => ast.kind === Kind.INT ? new Date(ast.value) : null
 
 export const Date = {

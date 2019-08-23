@@ -13,7 +13,7 @@ export const Label = styled.label`
   margin-bottom: 0.2em;
   color: ${props => props.theme.main};
   display: block;
-  text-align: left;
+  text-align: right;
 `;
 
 const fadeIn = keyframes`
@@ -79,6 +79,7 @@ export const TextArea = styled.textarea`
   line-height: 24px;
   width: 280px;
   height: auto;
+  min-height: 100px;
   color: black;
   border-radius: 6px;
   margin-bottom: 0.5em;

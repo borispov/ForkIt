@@ -6,8 +6,9 @@ const FooterWrap = styled.div`
   background: ${props => props.theme.darkgray};
   color: ${props => props.theme.white};
   font-family: 'Prompt';
-  position: relative;
-  margin-top: 120px;
+  position: absolute;
+  bottom: 0;
+  // margin-top: 120px;
   // bottom: 0;
   height: 64px;
   padding-top: 8px;

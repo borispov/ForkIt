@@ -22,8 +22,11 @@ export default ({recipes}, props) => {
 
         {({ loading, error, data }) => {
 
-          if ( loading ) return `<h3> Loading ... </h3>`
-          if ( error ) return `<h5> Error: ${error} </h5>`
+          if ( loading ) return <h3 style={{margin: '40px auto', textAlign: 'center'}}> Loading ... </h3>
+          if (error) {
+            console.log(error)
+          }
+          if ( error ) return <h5 style={{margin: '40px auto', textAlign: 'center'}}> Error: ${error.msg} </h5>
 
           console.log(data.getAllRecipes)
           return ( 

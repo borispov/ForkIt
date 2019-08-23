@@ -91,7 +91,7 @@ const SignUp = (props) => {
                         value={inputs.firstName}
                         type="text"
                         name="firstName"
-                        placeholder="First..."
+                        placeholder="שם פרטי"
                         onChange={handleChange}
                         minLength={3}
                         required
@@ -100,7 +100,7 @@ const SignUp = (props) => {
                         value={inputs.lastName}
                         type="text"
                         name="lastName"
-                        placeholder="Last ..."
+                        placeholder="שם משפחה"
                         onChange={handleChange}
                         required
                         minLength={2}
@@ -113,7 +113,7 @@ const SignUp = (props) => {
                       required
                     />
                     <Input
-                      placeholder="password"
+                      placeholder="סיסמא"
                       type="password"
                       name="pw"
                       onChange={handleChange}
@@ -121,7 +121,7 @@ const SignUp = (props) => {
                       required
                     />
                     <Input
-                      placeholder="confirm password"
+                      placeholder="אימות סיסמא"
                       type="password"
                       name="cpw"
                       onChange={handleChange}
@@ -131,9 +131,9 @@ const SignUp = (props) => {
                   <FormGroup>
                     {
                       errors.pwError &&
-                        <Label>"Password don't match"</Label>
+                        <Label>"סיסמא לא תואמת"</Label>
                     }
-                    <Btn type="submit">Register!</Btn>
+                    <Btn type="submit">הרשם!</Btn>
                   </FormGroup>
                   </form>
 

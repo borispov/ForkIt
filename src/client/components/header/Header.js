@@ -14,6 +14,7 @@ const Title = styled.h1`
   text-align: center;
   position: relative;
   width: auto;
+  margin-bottom: 40px;
 
   @media (max-width: ${remcalc(768)}) {
     font-size: ${remcalc(32)};
@@ -44,7 +45,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: auto;
-  margin-bottom: ${remcalc(48)};
+  margin-bottom: ${remcalc(88)};
   max-width: 1024px;
   height: 45px;
 

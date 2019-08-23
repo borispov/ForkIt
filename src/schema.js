@@ -1,5 +1,7 @@
 import { gql } from 'apollo-server-express'
 
+// Note: Testing using ingridients as a String rather than a custom type with two Strings in it.
+
 export const typeDefs = gql`
 
   scalar Date
@@ -21,6 +23,7 @@ export const typeDefs = gql`
   }
 
   # Can Integrate Total Cooks by all users. 
+
   type Recipe {
     _id: String!
     name: String!
@@ -30,7 +33,7 @@ export const typeDefs = gql`
     time: String
     difficulty: String!
     image: String
-    ingridients: [Ingridient]
+    ingridients: String!
     lastCookedAt: Date
     totalCooks: Int
   }
@@ -44,6 +47,7 @@ export const typeDefs = gql`
     profileImage: String
     email: String!
     joinDate: String
+    recipeList: [String]
   }
 
   type Token {
@@ -51,7 +55,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    getCurrentUser: User
+    getCurrentUser(email: String): User
     getUserProfile: User
     getAllUsers: [User]
     profilePage(Email: String!): User
@@ -81,7 +85,7 @@ export const typeDefs = gql`
       time: String,
       difficulty: String!,
       image: String,
-      ingridients: [Ingr],
+      ingridients: String!,
       authorID: String
     ): Recipe
 

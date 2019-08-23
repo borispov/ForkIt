@@ -1,11 +1,11 @@
 
 export const navLinks = [
-  {title: 'Home', address: '/home'},
-  {title: 'About', address: '/about'},
-  {title: 'My Kitchen', address: '/kitchen'},
+  {title: 'בית', address: '/home'},
+  {title: 'אודות', address: '/about'},
+  {title: 'המבטח שלי', address: '/kitchen'},
 ]
 
 export const addRecipe = {
-  title: 'Add Recipe', 
+  title: 'הוסף מתכון', 
   address: '/AddRecipe'
 }

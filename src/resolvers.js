@@ -31,9 +31,9 @@ export const resolvers = {
 
     // get single recipe
     getRecipe: async(root, { _id }, { Recipe }) => {
-      console.log(_id)
+      // console.log(_id)
       const recipe = await Recipe.findOne({ _id })
-      console.log(recipe)
+      // console.log(recipe)
       if (!recipe) throw new Error('recipe was not found')
       return recipe
     },
@@ -148,10 +148,12 @@ export const resolvers = {
     // TODO: Better Error Handling 
     cookRecipe: async(
       root, 
-      { email, _recID }, 
+      { _recID, email },
       { User }
     ) => {
+      console.log('...Cooking Recipe...')
       const userInQuestion = await User.findOne({ email }, async (err, data) => {
+        console.log('inside recipe cooking')
         if (err) console.log(err)
 
         const userRecipe = await data.recipeList.filter(rec => rec.refID === _recID)
