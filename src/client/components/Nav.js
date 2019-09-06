@@ -6,6 +6,7 @@ import AddRecipeBtn from './AddRecipeBtn';
 import { navLinks } from '../../utils/config';
 import Search from './styling/Search';
 import withSession from '../hoc/withSession';
+import isLogged from '../hoc/isLogged';
 import PropTypes from 'prop-types';
 // import MenuIcon from './align-center.svg';
 
@@ -120,8 +121,7 @@ const LoggedInComps = (
   </React.Fragment>
 )
 
-const Nav = ({ session }) => (
-
+const Nav = ({ isLogged }) => (
 
   <Wrapper>
     <List>
@@ -133,7 +133,7 @@ const Nav = ({ session }) => (
       </Link>
       <div>
         {
-          !(session && session.getCurrentUser !== null) ?
+          !isLogged ?
             NotLoggedInComps :
             LoggedInComps
         }
@@ -150,4 +150,4 @@ const Nav = ({ session }) => (
 
 )
 
-export default withSession(Nav)
+export default isLogged(Nav)

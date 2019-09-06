@@ -15,7 +15,6 @@ import {
   getRecipes,
   oneRecipe,
 } from './models/RecipeService';
-// import Date, { serialize, parseValue, parseLiteral } from './utils/scalar-helper'
 
 const createToken = (user, secret, expiresIn) => {
   const { firstName, email } = user
@@ -37,6 +36,7 @@ export const resolvers = {
   Query: {
     // Get user's credentials
     getCurrentUser: async(root, { email }, { currentUser, User }) => {
+      if (currentUser == undefined && email == undefined) return null
       const usrEmail = email || currentUser.email
       return retrieveUser(usrEmail, User)
     },

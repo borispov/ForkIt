@@ -4,9 +4,10 @@ import RecipeCard from './recipe/RecipeCard';
 import RecipeItem from './recipe/RecipeItem';
 import { Col, Row } from 'react-styled-flexboxgrid';
 import remcalc from 'remcalc';
+import withSession from '../hoc/withSession';
 
-const mapRecipeCards = (rec, idx) => <RecipeCard key={idx} recipeData={rec} />
-const mapRecipeItems = (rec ,idx) => <RecipeItem key={idx} recipeData={rec} />
+const mapRecipeCards = (rec, idx) => (email) => <RecipeCard email={email} key={idx} recipeData={rec} />
+const mapRecipeItems = (rec ,idx) => (email) => <RecipeItem email={email} key={idx} recipeData={rec} />
 
 const Wrapper = styled.div`
   max-width: 1140px;
@@ -20,12 +21,17 @@ const RowWrapper = styled.div`
   margin: 0 auto;
 `
 
-const RecipeList = ({ data, layout = 'card' }) => {
+
+
+const RecipeList = ({ data, layout = 'card', session = {} }) => {
+
+  const objEmpty = obj => !!Object.keys(obj)
+  const email = !objEmpty(session) && session.getCurrentUser.email || ''
 
   const listLayout = 
     layout === 'card' ? 
-      (data.map(mapRecipeCards)) :
-      ( <RowWrapper>{data.map(mapRecipeItems)}</RowWrapper> )
+    (data.map((rec,idx) => mapRecipeCards(rec,idx)(email))) :
+    ( <RowWrapper>{data.map((rec,idx) => mapRecipeItems(rec,idx)(email))}</RowWrapper> )
 
   return (
     <Wrapper>
@@ -43,4 +49,4 @@ const RecipeList = ({ data, layout = 'card' }) => {
 
 
 
-export default RecipeList;
+export default withSession(RecipeList);

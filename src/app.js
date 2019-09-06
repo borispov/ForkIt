@@ -7,6 +7,7 @@ import React from 'react';
 import ReactaDOMServer, {renderToString } from 'react-dom/server';
 import styled, { ThemeProvider, ServerStyleSheet} from 'styled-components';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import { ApolloServer, gql } from 'apollo-server-express';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -14,7 +15,6 @@ import { createHttpLink } from 'apollo-link-http';
 import cors from 'cors';
 
 import template from './views/template';
-// import client from './utils/apolloState';
 import ServerRouter from './client/ServerRouter';
 import theme from './utils/theme';
 import { typeDefs } from './schema';
@@ -93,10 +93,6 @@ app.get(['*/:param', '*'], (req,res) => {
     ssrMode: true,
     link: createHttpLink({
       uri: `http://localhost:3000/graphql`,
-      onError: ({ networkError, graphQLErrors }) => {
-        console.log('graphQLErrors', graphQLErrors)
-        console.log('networkError', networkError)
-      },
       fetch: fetch,
       credentials: 'same-origin',
       headers: {
@@ -114,9 +110,11 @@ app.get(['*/:param', '*'], (req,res) => {
 
   const RootApp = (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <ServerRouter url={req.url} context={context} />
-      </ThemeProvider>
+      <ApolloHooksProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <ServerRouter url={req.url} context={context} />
+        </ThemeProvider>
+      </ApolloHooksProvider>
     </ApolloProvider>
   );
 
@@ -124,7 +122,6 @@ app.get(['*/:param', '*'], (req,res) => {
   getDataFromTree(RootApp)
 
   const initialApolloState = client.extract()
-  // console.log('this is the client state: ', initialApolloState)
   // const jsx = renderToString(sheet.collectStyles(RootApp));
   const dom = renderToString(RootApp)
   const styleTags = sheet.getStyleTags();
