@@ -7,7 +7,7 @@ const Schema = mongoose.Schema
 const RecipeListSchema = new Schema({
   refID: {
     type: String,
-    required: true
+    required: true,
   },
 
   totalCooks: {
@@ -15,7 +15,10 @@ const RecipeListSchema = new Schema({
     default: 0
   },
 
-  lastCooked: [Date]
+  lastCooked: {
+    type: [Date],
+    default: []
+  }
 })
 
 const UserSchema = new Schema({
@@ -46,7 +49,10 @@ const UserSchema = new Schema({
     Default: Date.now
   },
 
-  recipeList: [RecipeListSchema]
+  recipeList: {
+    type: [RecipeListSchema],
+    default: []
+  }
 
 })
 

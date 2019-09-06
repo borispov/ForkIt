@@ -25,7 +25,8 @@ const CookBtn = styled(Btn)`
 `
 
 
-const RecipeView = ({ recipe, match, session }) => {
+// TODO: if user is not logged in and clicks Cook Button,redirect him to Login page
+const RecipeView = ({ recipe, match, session = {} }) => {
 
   const _id = match.params.id
 
@@ -40,8 +41,7 @@ const RecipeView = ({ recipe, match, session }) => {
       the recID: ${_recID}
       the email: ${email}
     `)
-    // cb(_recID, email)
-
+    cb(_recID, email)
   }
 
   return (

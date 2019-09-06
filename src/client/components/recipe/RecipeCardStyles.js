@@ -26,8 +26,10 @@ export const CardWrapper = styled.div`
 `
 
 export const CardHeader = styled.header`
-  padding: ${remcalc(12)} ${remcalc(12)} ${remcalc(2)};
-  margin-bottom: ${remcalc(-16)};
+  padding: ${remcalc(0)} ${remcalc(12)} ${remcalc(0)};
+  margin-bottom: ${remcalc(-12)};
+  display: flex;
+  justify-content: space-between;
 `
 
 export const CardAuthor = styled.h4`
@@ -36,7 +38,7 @@ export const CardAuthor = styled.h4`
     color: black;
   }
   color: ${props => props.theme.lightgray};
-  padding-top: 6px;
+  // padding-top: 1px;
   font-weight: 300;
   font-family: 'Montserrat';
 `
@@ -44,15 +46,17 @@ export const CardAuthor = styled.h4`
 export const CardHeading = styled.h1`
   font-size: 24px;
   font-weight: bold;
+  margin-right: 8px;
 `
 
 export const CardHeadingSub = styled.h4`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: ${props => props.SubFontSize || '400'};
-  padding-top: -8px;
-  padding-bottom: 8px;
   font-weight: 300;
-  color: ${props => props.theme.main}BB;
+  // color: ${props => props.theme.main}BB;
+  color: #7f7f7f;
+  max-height: 42px;
+  margin-right: 8px;
 `
 
 export const CardBody = styled.div`
@@ -60,7 +64,7 @@ export const CardBody = styled.div`
   padding-left: 12px;
 `
 
-export const CardParagraph = styled.p`
+export const CardParagraph = styled.div`
   font-size: 17px;
   color: ${props => props.theme.main || '#d9d2d9'};
   line-height: ${props => props.theme.lineHeight || '1.35'};
@@ -110,12 +114,13 @@ const IngWrp = styled(InfoSpan)`;
 
 const IngridientListWrapper = styled.div`
   max-width: max-content;
+  min-width: fit-content;
   height: auto;
   opacity: 0;
   transition: all 0.3s ease-in-out;
   background-color: rgba(20,20,20,0.8);
   color: ${props => props.theme.white};
-  font-size: ${remcalc(16)};
+  font-size: 12px;
   font-family: 'Mono Space';
   font-weight: bold;
   position: absolute;
@@ -128,8 +133,7 @@ const IngridientListWrapper = styled.div`
   }
 `
 
-
-export const CardInstructions = ({ recipes }) => (
+export const CardIcons = ({ recipes }) => (
   <Flex>
     <Col xs={12}>
       <Row >
@@ -163,19 +167,6 @@ export const CardInstructions = ({ recipes }) => (
         </Col>
       </Row>
       <hr />
-      <Row>
-        <CardParagraph nomg lineHeight={'1.15'}>
-          <ol>
-            {
-              recipes.instructions
-                .split('\n')
-                .map((step, index) => (
-                  <p key={index}>{index}){step}</p>
-                ))
-            }
-          </ol>
-        </CardParagraph>
-      </Row>
     </Col>
   </Flex>
 )

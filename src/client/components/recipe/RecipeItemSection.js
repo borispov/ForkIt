@@ -29,15 +29,17 @@ const Wrapper = styled.div`
 const FlexSection =styled.div`
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
   max-width: auto;
   width: inherit;
+  margin-left: 55px;
+  margin-right: 55px;
 `
 
 const Instructions = styled.p`
   max-width: 420px;
   width: auto;
-  line-height: 1.4;
+  line-height: 1.15;
   font-size: 14px;
   font-family: ${props => props.theme.card.font};
   color: ${props => props.theme.main};
@@ -72,6 +74,8 @@ const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => 
       setErrorState(true)
       return null
     }
+    console.log('id: ', id)
+    console.log('mail: ', mail)
     cookRecipe()
   }
 
@@ -81,7 +85,7 @@ const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => 
   return (
     isOpen &&
       <React.Fragment>
-        <Mutation mutation={COOK_RECIPE} variables={{ _recID: ID, email }}>
+        <Mutation mutation={COOK_RECIPE} variables={{ $_recID: ID, $email: email }}>
 
         {(cookRecipe, {data}) => {
 
@@ -90,9 +94,11 @@ const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => 
               <Wrapper>
                 <FlexSection>
                   <Instructions>
-                    {instructions.split('\n').map((step, idx) => <p key={idx+1}>{`${idx}) ${step}`}</p>)}
+                    <h3>הוראות הכנה: </h3>
+                    {instructions.split('\n').map((step, idx) => <p key={idx}>{`${idx+1}) ${step}`}</p>)}
                   </Instructions>
                   <div>
+                    <h3>מרכיבים</h3>
                     <ul>
                     {
                       ingridients.split('\n').map((ingr, idx) => <li key={idx}>{ingr}</li>)

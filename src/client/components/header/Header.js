@@ -59,9 +59,11 @@ export default ({title, showSearch}) => (
   <Wrapper>
     <br />
     <Title><span>{title}</span></Title>
-    {/* disabling Search for testing it in the NAV  */}
+    {/*  
+    
     {showSearch && (
       <Search />
     )}
+    */}
   </Wrapper>
 )

@@ -12,7 +12,7 @@ const ImageContainer = styled.div`
   position: relative;
   flex-basis: 100%;
   // flex-basis: calc(33.333% - 20px);
-  margin: 10px;
+  margin: 0 0 10px;
   // cursor: pointer;
   transition: 0.5s all ease-in;
 `
@@ -21,8 +21,8 @@ const Img = styled.img`
   cursor: cursor;
   width: 100%;
   max-width: 620px;
-  min-height: 400px;
-  max-height: 400px;
+  min-height: 280px;
+  max-height: 280px;
 `
 
 export const Image = ({ image }) => (

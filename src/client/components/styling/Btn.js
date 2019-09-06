@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import remcalc from 'remcalc';
 
 const Btn = styled.button`
-  padding: ${remcalc(6)} ${remcalc(8)};
+  padding: 0 6px;
   border-radius: 2px;
   background: ${props => props.bg ? props.bg : props.theme.darkgray};
   color: ${props => props.color ? props.color : props.theme.cta};

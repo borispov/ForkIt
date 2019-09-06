@@ -38,6 +38,9 @@ const Login = (props, { refetch }) => {
     e.preventDefault()
     console.log('Submitting...')
     signinUser().then(async ({data}) => {
+      console.log('----------------')
+      console.log('Setting Up Cookies')
+      console.log('----------------')
       Cookie.set('token', data.signinUser.token)
       await props.refetch()
       console.log('logged in successfuly')

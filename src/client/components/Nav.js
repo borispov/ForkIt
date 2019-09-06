@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom'
 import remcalc from 'remcalc';
@@ -6,14 +6,14 @@ import AddRecipeBtn from './AddRecipeBtn';
 import { navLinks } from '../../utils/config';
 import Search from './styling/Search';
 import withSession from '../hoc/withSession';
-
 import PropTypes from 'prop-types';
+// import MenuIcon from './align-center.svg';
 
 const Wrapper = styled.nav`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   max-width: 1090px;
   padding: ${remcalc(62)} 12px;
   margin: 0 auto 0;
@@ -82,6 +82,13 @@ const StyledLink = styled(Link)`
   }
 `
 
+// const HamburgerIcon = styled(MenuIcon)`
+//   opacity: 0;
+//   @media (max-width: 768px) {
+//     opacity: 1;
+//   }
+// `
+
 const MySpan = styled.span`
 `
 
@@ -114,6 +121,8 @@ const LoggedInComps = (
 )
 
 const Nav = ({ session }) => (
+
+
   <Wrapper>
     <List>
       {
@@ -124,16 +133,18 @@ const Nav = ({ session }) => (
       </Link>
       <div>
         {
-          session.getCurrentUser === null ?
+          !(session && session.getCurrentUser !== null) ?
             NotLoggedInComps :
             LoggedInComps
         }
-        {/* {console.log(session.getCurrentUser)} */}
       </div>
     </List>
+
+    {/*
     <React.Fragment>
       <Search asNav='asNav' />
     </React.Fragment>
+    */}
 
   </Wrapper>
 

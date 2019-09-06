@@ -10,11 +10,13 @@ import { ADD_RECIPE } from '../../queries';
 import gql from 'graphql-tag'
 import * as Cookie from 'js-cookie';
 
+
+const defaultDiff = 'תבחר רמת קושי'
 const initialState = {
   name: '',
   description: '',
   image: '',
-  difficulty: 'תבחר רמת קושי',
+  difficulty: defaultDiff,
   author: '',
   time: 'N/A'
 }
@@ -109,7 +111,7 @@ class AddRecipe extends React.Component {
 
   // Bit reversed implementation of validation function, lol.
   isValidForm = (name, ingridients, instructions, difficulty) => {
-    const isValid = !name || (!ingridients || !hasNewLine(ingridients)) || (!instructions || !hasNewLine(instructions)) || !difficulty
+    const isValid = !name || (!ingridients || !hasNewLine(ingridients)) || (!instructions || !hasNewLine(instructions)) || !difficulty !== defaultDiff
     return !isValid
   }
 
@@ -139,6 +141,11 @@ class AddRecipe extends React.Component {
 
   render() {
     const { description, ingridients, name, instructions, difficulty, image, time } = this.state
+    if (this.props.session) {
+      const { firstName, lastName } = this.props.session.getCurrentUser
+    }
+    const author = this.props.session.getCurrentUser &&
+      `${this.props.session.getCurrentUser.firstName} ${this.props.session.getCurrentUser.firstName}`  || 'anonymous'
     this.state;
     // join all errors and display them in a multiline string
     const anyError = Object.values(this.state.errorMsg).filter(val => val !== null).join('\n')
@@ -149,7 +156,7 @@ class AddRecipe extends React.Component {
           <Wrapper>
             <Col>
 
-              <Mutation mutation={ ADD_RECIPE } variables={{ time, ingridients, name, instructions, difficulty, description, image }} >
+              <Mutation mutation={ ADD_RECIPE } variables={{ time, author, ingridients, name, instructions, difficulty, description, image }} >
 
                 {(addRecipe, {data}) => {
 
@@ -176,9 +183,9 @@ class AddRecipe extends React.Component {
                           />
                           <Label>רמת קושי:</Label>
                           <Select value={this.state.difficulty} onChange={this.handleSelect}>
-                            <option value='HARD'>קשה</option>
-                            <option value='MEDIUM'>בינוני</option>
-                            <option value='EASY'>קל</option>
+                            <option value='קשה'>קשה</option>
+                            <option value='בינוני'>בינוני</option>
+                            <option value='קל'>קל</option>
                           </Select>
                           <Input
                             defaultValue=''

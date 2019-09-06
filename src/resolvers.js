@@ -1,10 +1,25 @@
 import { GraphQLScalarType } from 'graphql';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import Date, { serialize, parseValue, parseLiteral } from './utils/scalar-helper'
+import {
+  signIn,
+  signUp,
+  retrieveUser,
+  getUsers,
+  addRecipeToUser,
+  addRecToUser
+} from './models/UserService';
+import {
+  checkRecipe,
+  cookRec,
+  getRecipes,
+  oneRecipe,
+} from './models/RecipeService';
+// import Date, { serialize, parseValue, parseLiteral } from './utils/scalar-helper'
 
 const createToken = (user, secret, expiresIn) => {
   const { firstName, email } = user
+  console.log('in token func')
   return jwt.sign({ firstName, email }, secret, { expiresIn })
 }
 
@@ -13,40 +28,27 @@ export const resolvers = {
   Date: new GraphQLScalarType({
     name: 'Date',
     description: 'Date type scalar',
-    parseValue, serialize, parseLiteral
+    serialize: (val) => val.getTime(),
+    parseValue: (val) => new Date(val),
+    parseLiteral: (ast) => new Date(ast.value),
+    // parseValue, serialize, parseLiteral
   }),
 
   Query: {
     // Get user's credentials
-    getCurrentUser: async(root, args, { currentUser, User }) => {
-      if (!currentUser) return null
-      const user = await User.findOne({ email: currentUser.email })
-      return user
+    getCurrentUser: async(root, { email }, { currentUser, User }) => {
+      const usrEmail = email || currentUser.email
+      return retrieveUser(usrEmail, User)
     },
 
-    getAllUsers: async(root, args, { User }) => {
-      const users = await User.find()
-      return users
-    },
+    getAllUsers: async(root, args, { User }) => await getUsers(User),
 
     // get single recipe
-    getRecipe: async(root, { _id }, { Recipe }) => {
-      // console.log(_id)
-      const recipe = await Recipe.findOne({ _id })
-      // console.log(recipe)
-      if (!recipe) throw new Error('recipe was not found')
-      return recipe
-    },
+    getRecipe: async(root, { _id }, { Recipe }) => oneRecipe(_id, Recipe),
+
 
     // get all recipes
-    getAllRecipes: async(root, { author }, { Recipe }) => {
-      const recipes = author ?
-        await Recipe.find({author: author}).sort({
-          createdAt: "desc"
-        }) :
-        await Recipe.find().sort({createdAt: "desc"})
-      return recipes
-    }
+    getAllRecipes: async(root, { author }, { Recipe }) => getRecipes(Recipe, author)
   },
 
   Mutation: {
@@ -55,39 +57,23 @@ export const resolvers = {
     // ---------- USER MUTATIONS -----------------
     // -------------------------------------------
 
-    // This is how we register a user to the system
     signupUser: async (root, { firstName, lastName, email, password }, { User }) => {
-      const user = await User.findOne({ email })
-      if (user) { 
-        throw new Error('A user with this email already exists')
-      }
 
-      const newUser = await new User({
-        firstName,
-        lastName,
-        email,
-        password
-      }).save()
-
+      const newUser = await signUp(firstName, lastName, email, password, User)
+      console.log('user registered && logged in')
       return { token: createToken(newUser, 'secret', '24hr') }
     },
 
-    // Log in, no further comments, code is self explanatory. 
+    // Log in, Logic is in ./models/UserService
     signinUser: async(root, {email, password}, { User }) => {
 
-      const user = await User.findOne({ email })
-      if (!user) { 
-        throw new Error('User has not been found')
+      try {
+        console.log(email, password)
+        const usr = await signIn(email, password, User)
+        return { token: createToken(usr, 'secret', 43200) }
+      } catch(e) {
+        return console.error(e)
       }
-
-      const isValidPw = await bcrypt.compare(password, user.password)
-      if (!isValidPw) {
-        throw new Error('Wrong password, try again')
-      }
-
-      console.log('--Logging in user ::', email)
-
-      return { token: createToken(user, 'secret', 43200) }
 
     },
 
@@ -99,30 +85,15 @@ export const resolvers = {
 
     // Recipes -- add recipe
     // TODO: Better Error Handling.
+    // args: name, description, instructions, ingridients, difficulty, image, time, author.
+    // { authorID, name, description, instructions, time, author, difficulty, image, ingridients},
     addRecipe: async(
       root,
-      { authorID, name, description, instructions, time, author, difficulty, image, ingridients},
+      { authorID, ...restArg },
       { Recipe, User }
     ) => {
-      const newRecipe = await new Recipe({
-        authorID,
-        name,
-        description,
-        instructions,
-        difficulty,
-        author,
-        time,
-        image,
-        ingridients
-      }).save()
-      const user = await User.findOneAndUpdate(
-        { email: authorID },
-        {$push: { "recipeList": newRecipe._id }},
-        (err, data) => {
-          if (err) console.log(err)
-          console.log(data)
-        }
-      )
+      const newRecipe = await new Recipe({authorID, ...restArg}).save()
+      await addRecToUser(authorID, newRecipe._id, User)
     },
 
     // Adding reference ID to user's list. 
@@ -130,43 +101,32 @@ export const resolvers = {
       root,
       { email, _recID },
       { User , RecipeList }
-    ) => {
-      await User.findOne({ email }, async (err, data) => {
-        const newRecipeToList = await new RecipeList({refID: _recID})
-        // for debugging...
-        console.log(newRecipeToList)
-        const newState = [
-          ...data.recipeList,
-          newRecipeToList
-        ]
-        data.recipeList = newState
-        data.save()
-      })
-    },
+    ) => await addRecipeToUser(email, _recID)(User, RecipeList),
 
     // Current Implementation: FIND USER -> FIND RECIPE by "refID" -> modify it (add date to list, inc totalCooks)
     // TODO: Better Error Handling 
     cookRecipe: async(
       root, 
       { _recID, email },
-      { User }
+      { User, RecipeList}
     ) => {
-      console.log('...Cooking Recipe...')
-      const userInQuestion = await User.findOne({ email }, async (err, data) => {
-        console.log('inside recipe cooking')
-        if (err) console.log(err)
 
-        const userRecipe = await data.recipeList.filter(rec => rec.refID === _recID)
-        const updatedDates = [
-          new Date(),
-          ...userRecipe.lastCooked
-        ]
-        const newTotalCooks = userRecipe.totalCooks + 1
-        userRecipe.lastCooked = updatedDates
-        userRecipe.totalCooks = newTotalCooks
-        console.log('-- updating recipe cook information: 1) total Cooks 2) last date')
-        data.save()
-      })
+      const user = await retrieveUser(email, User)
+      const hasRecipe = checkRecipe(user.recipeList, _recID)
+      if (!hasRecipe) {
+        await addRecipeToUser(email, _recID)(User, RecipeList)
+        await user.save()
+        console.log(`between adding a rec and a timeout`)
+        setTimeout( async () => {
+          let newUser = await retrieveUser(email, User)
+          await cookRec(newUser.recipeList, _recID)
+          newUser.save()
+        }, 250)
+
+      } else {
+        await cookRec(user.recipeList, _recID)
+        user.save()
+      }
     }
 
 

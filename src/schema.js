@@ -25,7 +25,7 @@ export const typeDefs = gql`
   # Can Integrate Total Cooks by all users. 
 
   type Recipe {
-    _id: String!
+    _id: ID
     name: String!
     description: String!
     instructions: String!

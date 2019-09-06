@@ -18,6 +18,8 @@ const GlobalStyle = createGlobalStyle`
         background-color: ${props => props.theme.lightoverlay};
         overflow-x: hidden;
         direction: rtl;
+        background-color: #f0f0f0;
+        background-image: url('../assets/i-like-food.svg');
   }
 
   code {

@@ -78,6 +78,8 @@ const RecipeItem = ({ recipeData }) => {
 
   const { _id, instructions, ingridients, name, author, time, difficulty, lastCooked } = recipeData
 
+  console.log(author)
+
   const openSection = () => {
     console.log('state before trigger: ', isOpen)
     trigger(!isOpen)
@@ -97,6 +99,7 @@ const RecipeItem = ({ recipeData }) => {
           isOpen={isOpen}
           instructions={instructions}
           ingridients={ingridients}
+          email={author}
         >
         </RecipeItemSection>
       </ListWrapper>

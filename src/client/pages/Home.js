@@ -28,7 +28,6 @@ export default ({recipes}, props) => {
           }
           if ( error ) return <h5 style={{margin: '40px auto', textAlign: 'center'}}> Error: ${error.msg} </h5>
 
-          console.log(data.getAllRecipes)
           return ( 
             <RecipeList data={data.getAllRecipes} />
           )
