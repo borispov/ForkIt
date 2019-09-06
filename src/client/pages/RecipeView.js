@@ -10,6 +10,15 @@ import { faClock, faCube } from '@fortawesome/free-solid-svg-icons';
 import { faStackExchange  } from '@fortawesome/free-brands-svg-icons';
 import Btn from '../components/styling/Btn';
 import RecipeSingle from '../components/recipe/RecipeSingle';
+import gql from 'graphql-tag';
+
+const COOKIT = gql`
+  mutation cookRecipe( $_recID: String!, $email: String! ) {
+    cookRecipe(_recID: $_recID, email: $email) {
+      firstName
+    }
+  }
+`
 
 const Wrapper = styled.div`
   margin-top: 62px;
@@ -30,7 +39,8 @@ const RecipeView = ({ recipe, match, session = {} }) => {
 
   const _id = match.params.id
 
-  const submitCook = (_id, cb) => {
+  const submitCook = (e, _id, cookRecipe) => {
+    e.preventDefault();
     if (!_id || !session.getCurrentUser.email) {
       console.log('Missing Parameters For Mutation Query')
       return null
@@ -41,7 +51,7 @@ const RecipeView = ({ recipe, match, session = {} }) => {
       the recID: ${_recID}
       the email: ${email}
     `)
-    cb(_recID, email)
+    cookRecipe({ variables: { _recID: _id, email: email } })
   }
 
   return (
@@ -60,15 +70,11 @@ const RecipeView = ({ recipe, match, session = {} }) => {
                 {
                   session.getCurrentUser ?
                     (
-                      <Mutation
-                        mutation={COOK_RECIPE}
-                        variables={{
-                          _recID: _id,
-                          email: session.getCurrentUser.email
-                        }} >
+                      <Mutation mutation={COOK_RECIPE} >
 
-                        {(cookRecipe, { data }) => (
-                          <CookBtn onClick={() => submitCook(_id, cookRecipe)}>הרגע בישלתי!</CookBtn>
+                        {(cookRecipe, { loading, error }) => (
+
+                          <CookBtn onClick={(e) => submitCook(e, _id, cookRecipe)}>הרגע בישלתי!</CookBtn>
                         )}
 
                       </Mutation>

@@ -111,6 +111,8 @@ export const resolvers = {
       { User, RecipeList}
     ) => {
 
+      console.log('email: ', email)
+
       const user = await retrieveUser(email, User)
       const hasRecipe = checkRecipe(user.recipeList, _recID)
       if (!hasRecipe) {

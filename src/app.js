@@ -93,6 +93,10 @@ app.get(['*/:param', '*'], (req,res) => {
     ssrMode: true,
     link: createHttpLink({
       uri: `http://localhost:3000/graphql`,
+      onError: ({ networkError, graphQLErrors }) => {
+        console.log('graphQLErrors', graphQLErrors)
+        console.log('networkError', networkError)
+      },
       fetch: fetch,
       credentials: 'same-origin',
       headers: {

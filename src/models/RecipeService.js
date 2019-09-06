@@ -19,7 +19,7 @@ export const cookRec = async ( recipeList, _recID) => {
   const newTotalCooks = userRecipe.totalCooks + 1
   userRecipe.lastCooked = updatedDates
   userRecipe.totalCooks = newTotalCooks
-  console.log('Recipe has been cooked: ${newTotalCooks} by user.')
+  console.log(`Recipe has been cooked: ${newTotalCooks} times by user.`)
   return userRecipe
 }
 

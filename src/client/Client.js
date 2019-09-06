@@ -13,6 +13,10 @@ import { ApolloProvider } from 'react-apollo';
 const client = new ApolloClient({
   link: createHttpLink({
     uri: 'http://localhost:3000/graphql',
+    onError: ({ networkError, graphQLErrors }) => {
+      console.log('graphQLErrors', graphQLErrors)
+      console.log('networkError', networkError)
+    },
     fetch: fetch
   }),
   cache: new InMemoryCache().restore(window.__APOLLO_STATE__)

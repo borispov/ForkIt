@@ -19,14 +19,10 @@ export const ADD_RECIPE = gql`
 `
 
 export const COOK_RECIPE = gql`
-  mutation cookRecipe(
-    $_recID: String!,
-    $email: String!
-  ) {
-    cookRecipe(
-      _recID: $_recID,
-      email: $email
-    ) {User}
+  mutation cookRecipe( $_recID: String!, $email: String!) { 
+    cookRecipe(_recID: $_recID, email: $email) {
+      firstName
+    }
   }
 `
 
