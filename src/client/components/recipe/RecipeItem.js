@@ -72,7 +72,7 @@ const Piece = styled.span`
 const mapToItems = (rec, key) => <RecipeItemSection key={key} data={rec} />
 
 
-const RecipeItem = ({ recipeData }) => {
+const RecipeItem = ({ recipeData, email }) => {
 
   const [isOpen, trigger] = useState(false)
 
@@ -99,7 +99,8 @@ const RecipeItem = ({ recipeData }) => {
           isOpen={isOpen}
           instructions={instructions}
           ingridients={ingridients}
-          email={author}
+          author={author}
+          email={email}
         >
         </RecipeItemSection>
       </ListWrapper>

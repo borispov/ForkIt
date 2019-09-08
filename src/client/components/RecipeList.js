@@ -25,9 +25,12 @@ const RowWrapper = styled.div`
 
 const RecipeList = ({ data, layout = 'card', session = {} }) => {
 
-  const objEmpty = obj => !!Object.keys(obj)
-  const email = !objEmpty(session) && session.getCurrentUser.email || ''
+  console.log(data)
+  const objEmpty = obj => !Object.keys(obj).length
+  const email = !objEmpty(session) && session.getCurrentUser && session.getCurrentUser.email || ''
+  console.log(session && session)
 
+  console.log(email)
   const listLayout = 
     layout === 'card' ? 
     (data.map((rec,idx) => mapRecipeCards(rec,idx)(email))) :

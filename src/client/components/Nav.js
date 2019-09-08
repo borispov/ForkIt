@@ -39,7 +39,6 @@ const List = styled.ul`
   }
 `
 
-// the items in the ul
 const Item = styled.li`
   // padding-top: ${remcalc(6)};
   margin-right: ${remcalc(25)};

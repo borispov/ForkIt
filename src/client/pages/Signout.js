@@ -19,7 +19,9 @@ const SignOut = ({ history }) => {
     console.log('logged Out')
     Cookie.remove('token')
     client.resetStore()
-    history.push('/home')
+    setTimeout(() => {
+      history.push('/home')
+    }, 1200)
   }
 
   return (
@@ -30,7 +32,7 @@ const SignOut = ({ history }) => {
             <>
               <Title> Good Bye . . . </Title>
               {
-                setTimeout(() => handleSignout(client, history), 2500)
+                setTimeout(() => handleSignout(client, history), 1000)
               }
             </>
           )

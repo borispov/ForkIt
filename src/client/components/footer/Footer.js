@@ -22,8 +22,13 @@ const CopyMsg =  styled.h1`
   letter-spacing: 0.05px;
 `
 
+const P = styled.p`
+  font-family: serif;
+  font-size: 12px;
+`
+
 export default () => (
   <FooterWrap>
-    <CopyMsg>Copy Rights Reserved</CopyMsg>
+    <P>All Rights Reserved To Boris Povolotsky ™ @ <a style={{ color: 'inherit'}}href="www.borispov.com">www.borispov.com </a></P>
   </FooterWrap>
 )

@@ -60,7 +60,7 @@ const CookBtn = styled(Btn)`
 
 
 // TODO: DRY!
-const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => {
+const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, author, email }) => {
 
   const [errorState, setErrorState] = useState(false)
 
@@ -85,7 +85,7 @@ const RecipeItemSection = ({ instructions, ingridients, isOpen, ID, email }) => 
   return (
     isOpen &&
       <React.Fragment>
-        <Mutation mutation={COOK_RECIPE} variables={{ $_recID: ID, $email: email }}>
+        <Mutation mutation={COOK_RECIPE} variables={{ _recID: ID, email: email }}>
 
         {(cookRecipe, {data}) => {
 

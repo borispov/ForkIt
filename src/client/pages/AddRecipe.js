@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
+import withAuth from '../hoc/withAuth';
 import PageLayout from '../components/PageLayout';
 import { Col, Row } from 'react-styled-flexboxgrid'
 import styled from 'styled-components';
@@ -32,6 +33,9 @@ const FormWrapper = styled.div`
   margin: 0 auto;
   > * {
     text-align: right;
+  }
+  @media (max-width: 768px){
+    flex-direction: column;
   }
 `
 
@@ -142,6 +146,7 @@ class AddRecipe extends React.Component {
   render() {
     const { description, ingridients, name, instructions, difficulty, image, time } = this.state
     if (this.props.session) {
+      console.log(this.props.session)
       const { firstName, lastName } = this.props.session.getCurrentUser
     }
     const author = this.props.session.getCurrentUser &&
@@ -245,4 +250,5 @@ class AddRecipe extends React.Component {
   }
 }
 
-export default withRouter(AddRecipe)
+const condFn = session => session && session.getCurrentUser
+export default withAuth(condFn)(withRouter(AddRecipe))

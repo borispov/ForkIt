@@ -30,8 +30,16 @@ export const oneRecipe = async ( _id, ctx ) => {
   return recipe
 }
 
-export const getRecipes = async ( ctx, author ) => {
-  return author 
-    ? await ctx.find({ author: author }).sort({ createdAt: "desc" })
-    : await ctx.find().sort({ createdAt: "desc" })
+export const getRecipes = ( author ) => async ( Recipe, User ) => {
+  const user = await User.findOne({email: author})
+  const rids = user.recipeList.map(x => x.refID)
+  const allRecipes = await Recipe.find({ _id: { "$in" : rids }})
+  return allRecipes
+
+  // Get Author's Made recipes if you want to store them separately. 
+  // return author
+  //   ? await ctx.find({ author: author }).sort({ createdAt: "desc" })
+  //   : await ctx.find().sort({ createdAt: "desc" })
 }
+
+export const getAllRecipes = async Recipe => await Recipe.find({})

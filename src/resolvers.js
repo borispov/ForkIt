@@ -14,6 +14,7 @@ import {
   cookRec,
   getRecipes,
   oneRecipe,
+  getAllRecipes
 } from './models/RecipeService';
 
 const createToken = (user, secret, expiresIn) => {
@@ -46,9 +47,11 @@ export const resolvers = {
     // get single recipe
     getRecipe: async(root, { _id }, { Recipe }) => oneRecipe(_id, Recipe),
 
+    // get user's recipeList
+    getUserRecipes: async(root, { author }, { Recipe, User }) => getRecipes(author)(Recipe, User),
 
     // get all recipes
-    getAllRecipes: async(root, { author }, { Recipe }) => getRecipes(Recipe, author)
+    getAllRecipes: async(root, args, { Recipe }) => getAllRecipes(Recipe)
   },
 
   Mutation: {
@@ -100,8 +103,8 @@ export const resolvers = {
     addRecipeToKitchen: async(
       root,
       { email, _recID },
-      { User , RecipeList }
-    ) => await addRecipeToUser(email, _recID)(User, RecipeList),
+      { User , RecipeList, Recipe }
+    ) => await addRecipeToUser(email, _recID)(User, RecipeList, Recipe),
 
     // Current Implementation: FIND USER -> FIND RECIPE by "refID" -> modify it (add date to list, inc totalCooks)
     // TODO: Better Error Handling 

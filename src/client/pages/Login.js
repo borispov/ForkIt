@@ -38,13 +38,13 @@ const Login = (props, { refetch }) => {
     e.preventDefault()
     console.log('Submitting...')
     signinUser().then(async ({data}) => {
+      const to = props.match.path !== "/login" && props.location.pathname || '/home'
       console.log('----------------')
       console.log('Setting Up Cookies')
-      console.log('----------------')
       Cookie.set('token', data.signinUser.token)
       await props.refetch()
       console.log('logged in successfuly')
-      props.history.push('/home')
+      props.history.push(to)
     }).catch(() => {
       console.log('error occured')
       useState({...initState, err: 'incorrect email or password'})

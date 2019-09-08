@@ -9,10 +9,6 @@ import { Query } from 'react-apollo';
 
 const withAuth = condFn => Component => props => {
 
-  // if (props.testing = 'true'){
-  //   return <Component {...props} />
-  // }
-
   return (
 
     <Query query={GET_CURRENT_USER}>

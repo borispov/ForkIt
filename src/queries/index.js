@@ -29,15 +29,33 @@ export const COOK_RECIPE = gql`
 export const ADD_TO_KITCHEN = gql`
   mutation addRecipeToKitchen( $_recID: String!, $email: String!) {
     addRecipeToKitchen( _recID: $_recID, email: $email) {
-      recipeList
+      recipeList {
+        refID
+      }
     }
   }
 `
 
+export const GET_USER_RECIPES = gql`
+query ($author: String) {
+  getUserRecipes(author: $author) {
+    _id,
+    name,
+    description,
+    instructions,
+    difficulty,
+    image,
+    time,
+    author,
+    ingridients
+  }
+}
+`
+
 // the author variable is for fetching all recipes of specific users.
 export const GET_RECIPES = gql`
-  query($author: String) {
-    getAllRecipes(author: $author) {
+  query {
+    getAllRecipes {
       _id,
       name,
       description,

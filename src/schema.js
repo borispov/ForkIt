@@ -38,6 +38,12 @@ export const typeDefs = gql`
     totalCooks: Int
   }
 
+  type RecList {
+    refID: ID,
+    lastCooked: [String],
+    totalCooks: Int
+  }
+
   type User {
     _id: ID
     firstName: String!
@@ -47,7 +53,7 @@ export const typeDefs = gql`
     profileImage: String
     email: String!
     joinDate: String
-    recipeList: [String]
+    recipeList: [RecList]
   }
 
   type Token {
@@ -59,8 +65,9 @@ export const typeDefs = gql`
     getUserProfile: User
     getAllUsers: [User]
     profilePage(Email: String!): User
-    getRecipe(_id: String!): Recipe
-    getAllRecipes(author: String): [Recipe]
+    getRecipe(_iG: String!): Recipe
+    getUserRecipes(author: String): [Recipe]
+    getAllRecipes: [Recipe]
   }
 
   type Mutation {
